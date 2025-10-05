@@ -10,8 +10,8 @@ export default function TopNavBar () {
     <>
       <div className="topnavbar">
         <div className="title">
-          <img src="" alt="al" />
-          <h5>Habitat</h5>
+          <img src="../../assets/IMG_20251005_140119.png" className="title-icon" alt="al" />
+          <h4>Habitat</h4>
         </div>
         <IconButton className="icon" onClick={toggleTheme}> {
           theme === "dark" ? <LightModeIcon/> : <DarkModeIcon/>

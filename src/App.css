@@ -92,6 +92,13 @@ body {
   align-items: center;
   gap: 15px ;
 }
+.topnavbar .title-icon {
+  background-color: var(--background-color);
+  border-radius: 50px;
+  transition: var(--transition);
+  height: 50px;
+  width:50px ;
+}
 
 /* ==========================
    BOTTOM NAVBAR
@@ -99,23 +106,48 @@ body {
 .bottomnav {
   display: flex;
   justify-content: space-between;
+  flex-shrink: 0;
   align-items: center;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 0px 25px 5px 25px ;
+  padding: 0px 25px 15px 25px ;
   background-color: var(--primary-bg-color);
   transition: var(--transition);
   z-index: 10;
 }
 .nav {
+  display: flex;
   justify-content: center;
   align-items: center ;
+  color:var(--text-color) !important;
+  background-color: var(--background-color) !important;
+}
+.nav:hover {
+  flex-shrink: 0;
+  color: var(--background-color) !important;
+  background-color: var(--text-color) !important;
+  border-radius: 12px !important;
+  padding: 5px 20px !important;
+  transform: translateY(-0px) !important;
+  transition: var(--transition) !important;
 }
 
-.nav:hover {
-  background-color: blue !important;
-  padding: 5px 10px !important;
-  border-radius: 12px!important;
+.habits {
+  display: flex ;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+  padding: 20px 10px ;
+}
+.habits .add-hbt-btn {
+  background-color: var(--text-color) !important;
+  color:var(--background-color) !important ;
+  transition: var(--transition);
+  padding: 8px 25px;
+  border-radius: 12px;
+  margin: 5px;
+  text-transform: none ;
+  
 }

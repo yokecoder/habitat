@@ -4,29 +4,18 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import BarChartIcon from "@mui/icons-material/BarChart";
 
 export default function BottomNav() {
-  const handleClick = (e) => {
-    // Only proceed if a link (<a>) is clicked
-    const link = e.target.closest("a");
-    if (!link) return;
-
-    // Remove 'active' class from all sibling links
-    const parent = link.parentElement;
-    parent.querySelectorAll("a").forEach((el) => el.classList.remove("active"));
-
-    // Add 'active' class to clicked link
-    link.classList.add("active");
-  };
-
+  
+  
   return (
-    <div className="bottomnav" onClick={handleClick}>
+    <div className="bottomnav" >
       <Link className="link nav" to="/">
-        <HomeIcon className="icon" />
+        <HomeIcon  />
       </Link>
       <Link className="link nav" to="/tasks">
-        <ChecklistIcon className="icon" />
+        <ChecklistIcon  />
       </Link>
       <Link className="link nav" to="/stats">
-        <BarChartIcon className="icon" />
+        <BarChartIcon  />
       </Link>
     </div>
   );
