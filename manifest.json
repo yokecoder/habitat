@@ -1,0 +1,23 @@
+{
+  "name": "Habitat",
+  "short_name": "Habitat",
+  "description": "A habit and to-do tracking app",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/assets/IMG_20251005_140119.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/IMG_20251005_140119.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
