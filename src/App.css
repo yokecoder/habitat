@@ -163,6 +163,7 @@ body {
   justify-content: flex-start !important;
   align-items: center;
   gap: 48px;
+  transition: var(--transition);
 }
 .add-habits-pg .input-control {
   display: flex;
@@ -182,7 +183,26 @@ body {
 .add-habits-pg .actions {
   display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   width: inherit;
   gap: 100px;
+}
+.add-habits-pg .btn {
+  background-color: var(--text-color);
+  color: var(--background-color);
+}
+.add-habits-pg .btn-outlined {
+  background-color: none;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+}
+.goaltype .type-opt-btns {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+.goaltype .goal-opt-btn:hover {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: none;
 }
