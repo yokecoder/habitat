@@ -1,8 +1,8 @@
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import { Button } from "@mui/material";
-
 import useHabitStore from "../utils/habitlist";
+import HabitCard from "../comps/habitcard";
 
 export default function Habits() {
   const [showAddHabit, setShowAddHabit] = useState(false);
@@ -27,7 +27,10 @@ export default function Habits() {
       )}
 
       <div className="habits-list">
-        {/*habits && habits.map((h) => h.habitTitle)*/}
+        {habits &&
+          habits.map((h) => (
+            <HabitCard title={h.habitTitle} goaltype={h.goalType} />
+          ))}
       </div>
     </div>
   );
