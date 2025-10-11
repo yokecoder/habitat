@@ -1,9 +1,3 @@
-
-
-export default function  Tasks () {
-  
-  return (
-    <>Tasks of You</>
-  )
-  
+export default function Tasks() {
+  return <>Tasks for todays</>;
 }
