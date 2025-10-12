@@ -1,12 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Select, MenuItem } from "@mui/material";
 import useHabitStore from "../utils/habitlist";
 import HabitCard from "../comps/habitcard";
 
 export default function Habits() {
   const [showAddHabit, setShowAddHabit] = useState(false);
-  const { habits } = useHabitStore();
+  const { habits, getHabitById } = useHabitStore();
 
   return (
     <div className="habits">
@@ -29,24 +29,43 @@ export default function Habits() {
       <div className="habits-list">
         {habits &&
           habits.map((h) => (
-            <HabitCard title={h.habitTitle} goaltype={h.goalType} />
+            <HabitCard
+              key={h.id}
+              id={h.id}
+              title={h.habitTitle}
+              goaltype={h.goalType}
+              goalValue={h.goalValue}
+            />
           ))}
       </div>
     </div>
   );
 }
 
+{
+  /* component which provides ui for adding habits */
+}
 export function AddHabit({ onadd, onCancel }) {
   const [habitTitle, setHabitTitle] = useState("");
   const [habitDescription, setHabitDescription] = useState("");
   const [goalType, setGoalType] = useState("task");
-  const { habits, addHabit } = useHabitStore();
+  const [goalAmt, setGoalAmt] = useState(1);
+  const [goalTime, setGoalTime] = useState("");
+  const { addHabit } = useHabitStore();
 
   const handleAdd = () => {
     if (habitTitle === "") {
       return;
     }
-    let hbtData = { habitTitle, habitDescription, goalType };
+
+    let goalValue = null;
+    if (goalType === "amount") {
+      goalValue = goalAmt;
+    } else if (goalType === "time") {
+      goalValue = goalTime;
+    }
+
+    let hbtData = { habitTitle, habitDescription, goalType, goalValue };
     addHabit(hbtData);
   };
 
@@ -54,7 +73,6 @@ export function AddHabit({ onadd, onCancel }) {
     <div className="add-habits-pg">
       <h2>Add a New Habit</h2>
 
-      {/* Habit Name and Description */}
       <div className="input-control">
         <input
           type="text"
@@ -97,10 +115,27 @@ export function AddHabit({ onadd, onCancel }) {
         </div>
 
         {goalType === "amount" && (
-          <input type="text" className="inputbox" placeholder="amount" />
+          <div>
+            <input
+              type="number"
+              min={0}
+              max={100}
+              className="slt-goal-inp"
+              placeholder="amount"
+              value={goalAmt}
+              onChange={(e) => setGoalAmt(e.target.value)}
+            />
+            <span className="amt-label">times</span>
+          </div>
         )}
         {goalType === "time" && (
-          <input type="text" className="inputbox" placeholder="time" />
+          <input
+            type="timer"
+            className="slt-goal-inp"
+            placeholder="time"
+            value={goalTime}
+            onChange={(e) => setGoalTime(e.target.value)}
+          />
         )}
       </div>
 
@@ -119,6 +154,19 @@ export function AddHabit({ onadd, onCancel }) {
           Add
         </Button>
       </div>
+    </div>
+  );
+}
+
+export function ViewHabit({ habitId, onClose }) {
+  const { getHabitById } = useHabitStore();
+
+  const currentHabit = getHabitById(habitId);
+  return (
+    <div className="view-habits-pg">
+      <h1>{currentHabit.habitTitle}</h1>
+      <h2>{currentHabit.habitDescription}</h2>
+      <Button onClick={onClose}> Close </Button>
     </div>
   );
 }

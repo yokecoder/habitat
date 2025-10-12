@@ -150,7 +150,8 @@ body {
   margin: 5px;
   text-transform: none;
 }
-.add-habits-pg {
+.add-habits-pg,
+.view-habits-pg {
   background-color: var(--background-color);
   position: fixed;
   height: 100%;
@@ -170,16 +171,33 @@ body {
   flex-direction: column;
   gap: 15px;
 }
-.input-control .inputbox {
+.add-habits-pg .inputbox {
   all: unset;
   background-color: var(--text-color);
   color: var(--background-color);
-  font-size: 22px;
-  padding: 12px;
+  font-size: 24px !important;
+  padding: 12px !important;
   border-radius: 12px;
   text-wrap: wrap;
 }
 
+.slt-goal-inp {
+  all: unset !important;
+  margin: 8px !important;
+  background-color: none !important;
+  border: 1px solid var(--text-color) !important;
+  font-size: 18px !important;
+  padding: 12px !important;
+  border-radius: 12px !important;
+  width: 100px !important;
+}
+.amt-label {
+  font-size: 20px;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  padding: 12px;
+  border-radius: 12px;
+}
 .add-habits-pg .actions {
   display: flex;
   justify-content: center;

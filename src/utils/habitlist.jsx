@@ -10,7 +10,7 @@ const saveHabits = (habits) =>
   localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
 
 // Zustand store
-const useHabitStore = create((set) => ({
+const useHabitStore = create((set, get) => ({
   habits: loadHabits(),
 
   addHabit: (habitData) =>
@@ -30,6 +30,12 @@ const useHabitStore = create((set) => ({
   clearHabits: () => {
     saveHabits([]);
     set({ habits: [] });
+  },
+
+  // ✅ Fetch habit by ID
+  getHabitById: (id) => {
+    const { habits } = get();
+    return habits.find((h) => h.id === id) || null;
   },
 }));
 
