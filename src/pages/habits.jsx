@@ -27,16 +27,7 @@ export default function Habits() {
       )}
 
       <div className="habits-list">
-        {habits &&
-          habits.map((h) => (
-            <HabitCard
-              key={h.id}
-              id={h.id}
-              title={h.habitTitle}
-              goaltype={h.goalType}
-              goalValue={h.goalValue}
-            />
-          ))}
+        {habits && habits.map((h) => <HabitCard key={h.id} id={h.id} />)}
       </div>
     </div>
   );
@@ -65,7 +56,13 @@ export function AddHabit({ onadd, onCancel }) {
       goalValue = goalTime;
     }
 
-    let hbtData = { habitTitle, habitDescription, goalType, goalValue };
+    let hbtData = {
+      habitTitle,
+      habitDescription,
+      goalType,
+      goalValue,
+      status: null,
+    };
     addHabit(hbtData);
   };
 
@@ -164,9 +161,23 @@ export function ViewHabit({ habitId, onClose }) {
   const currentHabit = getHabitById(habitId);
   return (
     <div className="view-habits-pg">
-      <h1>{currentHabit.habitTitle}</h1>
-      <h2>{currentHabit.habitDescription}</h2>
-      <Button onClick={onClose}> Close </Button>
+      <span className="title">{currentHabit.habitTitle}</span>
+      {currentHabit.habitDescription && (
+        <span className="description">{currentHabit.habitDescription}</span>
+      )}
+      {currentHabit.goalType === "amount" ? (
+        <span className="goal">{currentHabit.goalValue} times</span>
+      ) : (
+        ""
+      )}
+
+      <div className="action-btns">
+        <Button onClick={onClose} className="btn">
+          Close
+        </Button>
+        <Button className="btn">Edit Habit</Button>
+        <Button className="btn">Delete Habit</Button>
+      </div>
     </div>
   );
 }

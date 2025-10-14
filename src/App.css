@@ -205,14 +205,17 @@ body {
   width: inherit;
   gap: 100px;
 }
-.add-habits-pg .btn {
+.add-habits-pg .btn,
+.view-habits-pg .btn {
   background-color: var(--text-color);
   color: var(--background-color);
+  text-transform: none;
 }
 .add-habits-pg .btn-outlined {
   background-color: none;
   border: 1px solid var(--text-color);
   color: var(--text-color);
+  text-transform: none;
 }
 .goaltype .type-opt-btns {
   display: flex;
@@ -224,11 +227,42 @@ body {
   color: var(--text-color);
   border: none;
 }
+.view-habits-pg {
+  align-items: flex-start !important;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.view-habits-pg .title,
+.description,
+.goal {
+  font-size: 36px;
+  padding: 16px;
+  margin: 5px;
+  width: inherit;
+  border-bottom: 1px solid var(--text-color);
+}
+.view-habits-pg .description,
+.goal {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.view-habits-pg .action-btns {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-right: 20px;
+}
+
 .habitcard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: var(--text-color) !important;
   color: var(--background-color) !important;
-  height: 80px;
-  width: 360px;
+  height: auto;
+  max-height: 180px;
+  width: 320px;
   max-width: 400px;
   border-radius: 12px !important;
   flex-shrink: 0;
