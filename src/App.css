@@ -175,7 +175,7 @@ body {
   all: unset;
   background-color: var(--text-color);
   color: var(--background-color);
-  font-size: 24px !important;
+  font-size: 22px !important;
   padding: 12px !important;
   border-radius: 12px;
   text-wrap: wrap;
@@ -252,6 +252,10 @@ body {
   justify-content: space-between;
   width: 80%;
   margin-right: 20px;
+}
+.view-habits-pg .habit-status {
+  font-size: 20px;
+  text-wrap: wrap;
 }
 
 .habitcard {

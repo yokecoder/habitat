@@ -159,6 +159,7 @@ export function ViewHabit({ habitId, onClose }) {
   const { getHabitById, removeHabit } = useHabitStore();
 
   const currentHabit = getHabitById(habitId);
+
   return (
     <div className="view-habits-pg">
       <span className="title">{currentHabit.habitTitle}</span>
@@ -171,6 +172,16 @@ export function ViewHabit({ habitId, onClose }) {
         ""
       )}
 
+      <div className="habit-status">
+        Status :
+        {currentHabit.status ? (
+          <p>Completed for Today</p>
+        ) : currentHabit.status === false ? (
+          <p>Skipped for Today</p>
+        ) : (
+          <p> Yet to Complete</p>
+        )}
+      </div>
       <div className="action-btns">
         <Button onClick={onClose} className="btn">
           Close
