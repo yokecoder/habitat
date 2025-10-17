@@ -5,8 +5,8 @@ import Tasks from "./pages/tasks";
 import Stats from "./pages/stats";
 import TopNavBar from "./comps/topnav";
 import BottomNav from "./comps/bottomnav";
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
@@ -16,10 +16,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Habits />} />
           <Route path="/tasks" element={<Tasks />} />
-          <Route path="/stats" element={<Stats/>} />
+          <Route path="/stats" element={<Stats />} />
         </Routes>
       </div>
       <BottomNav />
+      <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );
 }

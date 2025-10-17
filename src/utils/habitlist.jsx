@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { toast } from "react-toastify";
 
 // Generate unique ID
 const generateId = () => Math.random().toString(36).substring(2, 10);
@@ -17,6 +18,7 @@ const useHabitStore = create((set, get) => ({
     set((state) => {
       const updated = [...state.habits, { id: generateId(), ...habitData }];
       saveHabits(updated);
+      toast("Habit Added");
       return { habits: updated };
     }),
 
@@ -24,6 +26,7 @@ const useHabitStore = create((set, get) => ({
     set((state) => {
       const updated = state.habits.filter((h) => h.id !== id);
       saveHabits(updated);
+      toast("Habit Deleted ");
       return { habits: updated };
     }),
 
@@ -37,6 +40,16 @@ const useHabitStore = create((set, get) => ({
     const { habits } = get();
     return habits.find((h) => h.id === id) || null;
   },
+
+  updateStatus: (id, status) =>
+    set((state) => {
+      const updated = state.habits.map((habit) =>
+        habit.id === id ? { ...habit, status } : habit
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+      return { habits: updated };
+    }),
 }));
 
 export default useHabitStore;

@@ -10,7 +10,7 @@ import { useState } from "react";
 
 export default function HabitCard({ id }) {
   const [viewHabit, setViewHabit] = useState(false);
-  const { getHabitById } = useHabitStore();
+  const { getHabitById, updateStatus } = useHabitStore();
   const currHabit = getHabitById(id);
 
   return (
@@ -33,8 +33,14 @@ export default function HabitCard({ id }) {
           {currHabit.status === false && <div> skipped </div>}
           {currHabit.status === null && (
             <>
-              <CheckCircleIcon />
-              <CancelIcon />
+              <CheckCircleIcon
+                className="action-icon"
+                onClick={() => updateStatus(id, true)}
+              />
+              <CancelIcon
+                className="action-icon"
+                onClick={() => updateStatus(id, false)}
+              />
             </>
           )}
         </CardActions>

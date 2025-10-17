@@ -156,7 +156,7 @@ export function AddHabit({ onadd, onCancel }) {
 }
 
 export function ViewHabit({ habitId, onClose }) {
-  const { getHabitById } = useHabitStore();
+  const { getHabitById, removeHabit } = useHabitStore();
 
   const currentHabit = getHabitById(habitId);
   return (
@@ -176,7 +176,9 @@ export function ViewHabit({ habitId, onClose }) {
           Close
         </Button>
         <Button className="btn">Edit Habit</Button>
-        <Button className="btn">Delete Habit</Button>
+        <Button className="btn" onClick={() => removeHabit(habitId)}>
+          Delete Habit
+        </Button>
       </div>
     </div>
   );
