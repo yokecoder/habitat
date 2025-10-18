@@ -2,291 +2,323 @@
    THEME VARIABLES
 ========================== */
 :root[data-theme="light"] {
-  --background-color: #f2f1f1;
-  --text-color: #181818;
-  --primary-bg-color: #f2f1f1;
-  --topnav-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  --btmnav-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  --transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    --background-color: #f2f1f1;
+    --text-color: #181818;
+    --primary-bg-color: #dddddd;
+    --topnav-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    --btmnav-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    --transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 :root[data-theme="dark"] {
-  --background-color: #000000;
-  --text-color: #f2f1f1;
-  --primary-bg-color: #000000;
-  --topnav-box-shadow: 0 0 8px rgba(100, 100, 100, 1);
-  --btmnav-box-shadow: 0 0 5px rgba(100, 100, 100, 1);
-  --transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    --background-color: #000000;
+    --text-color: #d0d0d0;
+    --primary-bg-color: #151515;
+    --topnav-box-shadow: 0 0 8px rgba(100, 100, 100, 1);
+    --btmnav-box-shadow: 0 0 5px rgba(100, 100, 100, 1);
+    --transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+* {
+    transition: var(--transition) !important;
 }
 
 .icon {
-  color: var(--text-color) !important;
+    color: var(--text-color) !important;
+    transition: var(--transition) !important;
 }
 .link {
-  all: unset !important;
+    all: unset !important;
+    transition: var(--transition) !important;
 }
 /* ==========================
    GLOBAL RESET & BODY
 ========================== */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial,
-    sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family:
+        Poppins,
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Arial,
+        sans-serif;
 }
 
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: var(--transition);
-  user-select: none;
-  overflow: hidden; /* Only page-layout scrolls */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: var(--transition);
+    user-select: none;
+    overflow: hidden; /* Only page-layout scrolls */
 }
 
 body::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 body {
-  -ms-overflow-style: none; /* IE/Edge */
-  scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
 /* ==========================
    PAGE LAYOUT
 ========================== */
 .page-layout {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0; /* important for flex scrolling */
-  overflow-y: auto;
-  padding: 5px;
-  padding-bottom: 200px; /* space for bottom nav */
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0; /* important for flex scrolling */
+    overflow-y: auto;
+    padding: 5px;
+    padding-bottom: 200px; /* space for bottom nav */
 }
 
 .page-layout::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 /* ==========================
    TOP NAVBAR
 ========================== */
 .topnavbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 10px 5px 10px;
-  background-color: var(--primary-bg-color);
-  transition: var(--transition);
-  z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: var(--background-color);
+    transition: var(--transition);
+    z-index: 10;
 }
 .topnavbar .title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+.topnavbar .title-text {
+    font-size: 24px;
+    /*font-weight: bold;*/
 }
 .topnavbar .title-icon {
-  background-color: var(--background-color);
-  border-radius: 50px;
-  transition: var(--transition);
-  height: 50px;
-  width: 50px;
+    background-color: var(--background-color);
+    border-radius: 50px;
+    transition: var(--transition);
+    height: 50px;
+    width: 50px;
 }
 
 /* ==========================
    BOTTOM NAVBAR
 ========================== */
 .bottomnav {
-  display: flex;
-  justify-content: space-between;
-  flex-shrink: 0;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 0px 25px 15px 25px;
-  background-color: var(--primary-bg-color);
-  transition: var(--transition);
-  z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    flex-shrink: 0;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0px 25px 15px 25px;
+    background-color: var(--background-color);
+    transition: var(--transition);
+    z-index: 10;
 }
 .nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--text-color) !important;
-  background-color: var(--background-color) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
+    transition: var(--transition);
 }
-.nav:hover {
-  flex-shrink: 0;
-  color: var(--background-color) !important;
-  background-color: var(--text-color) !important;
-  border-radius: 12px !important;
-  padding: 5px 20px !important;
-  transform: translateY(-0px) !important;
-  transition: var(--transition) !important;
+.nav.active {
+    flex-shrink: 0;
+    color: var(--background-color) !important;
+    background-color: var(--text-color) !important;
+    border-radius: 12px !important;
+    padding: 5px 20px !important;
+    transform: translateY(-0px) !important;
+    transition: var(--transition) !important;
 }
 
+/* Main Habits Page Styles */
 .habits {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 10px;
 }
 .habits .add-hbt-btn {
-  background-color: var(--text-color) !important;
-  color: var(--background-color) !important ;
-  transition: var(--transition);
-  padding: 8px 25px;
-  border-radius: 12px;
-  margin: 5px;
-  text-transform: none;
-}
-.add-habits-pg,
-.view-habits-pg {
-  background-color: var(--background-color);
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 50px;
-  left: 0;
-  padding: 10px;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-  align-items: center;
-  gap: 48px;
-  transition: var(--transition);
-}
-.add-habits-pg .input-control {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-.add-habits-pg .inputbox {
-  all: unset;
-  background-color: var(--text-color);
-  color: var(--background-color);
-  font-size: 22px !important;
-  padding: 12px !important;
-  border-radius: 12px;
-  text-wrap: wrap;
+    color: var(--text-color) !important ;
+    border: 1px solid var(--text-color);
+    transition: var(--transition);
+    padding: 8px 25px;
+    border-radius: 12px;
+    margin: 5px;
+    text-transform: none;
+    transition: var(--transition) !important;
 }
 
-.slt-goal-inp {
-  all: unset !important;
-  margin: 8px !important;
-  background-color: none !important;
-  border: 1px solid var(--text-color) !important;
-  font-size: 18px !important;
-  padding: 12px !important;
-  border-radius: 12px !important;
-  width: 100px !important;
+/* Styles of Add & View Habit Pages */
+.add-habits-pg,
+.view-habits-pg {
+    background-color: var(--background-color);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 50px;
+    left: 0;
+    padding-top: 60px;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    row-gap: 36px;
+    transition: var(--transition);
 }
-.amt-label {
-  font-size: 20px;
-  background-color: var(--text-color);
-  color: var(--background-color);
-  padding: 12px;
-  border-radius: 12px;
+
+.add-habits-pg .title-text {
+    font-size: 20px;
+    padding: 2px;
+    text-align: left !important ;
 }
+
+.add-habits-pg .inputbox {
+    all: unset;
+    border-bottom: 2px solid var(--text-color);
+    font-size: 20px;
+    width: 300px;
+    padding: 8px;
+}
+.add-habits-pg .inputbox2 {
+    all: unset;
+    font-size: 20px;
+    padding: 5px;
+    background-color: var(--text-color);
+    color: var(--background-color);
+    text-align: center;
+    border-radius: 13px;
+    width: 240px;
+}
+
+.add-habits-pg .habit-goal-options {
+    display: flex;
+    gap: 18px;
+}
+.add-habits-pg .goal-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
 .add-habits-pg .actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: inherit;
-  gap: 100px;
+    display: flex;
+    width: 320px;
+    justify-content: space-between;
 }
+
 .add-habits-pg .btn,
 .view-habits-pg .btn {
-  background-color: var(--text-color);
-  color: var(--background-color);
-  text-transform: none;
+    background-color: var(--text-color);
+    color: var(--background-color);
+    border-radius: 16px;
+    text-transform: none;
+    transition: var(--transition) !important;
 }
+
 .add-habits-pg .btn-outlined {
-  background-color: none;
-  border: 1px solid var(--text-color);
-  color: var(--text-color);
-  text-transform: none;
+    background-color: none;
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+    border-radius: 14px;
+    text-transform: none;
+    transition: var(--transition) !important;
 }
-.goaltype .type-opt-btns {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+
+.add-habits-pg .habit-goal-options .btn-outlined:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+    outline: none;
 }
-.goaltype .goal-opt-btn:hover {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  border: none;
+
+.add-habits-pg .repeatability-option {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
 }
+
+/* Styles for View Habit Page */
 .view-habits-pg {
-  align-items: flex-start !important;
-  margin-left: 20px;
-  margin-top: 20px;
+    align-items: flex-start !important;
+    margin-left: 20px;
+    margin-top: 20px;
 }
 .view-habits-pg .title,
 .description,
 .goal {
-  font-size: 36px;
-  padding: 16px;
-  margin: 5px;
-  width: inherit;
-  border-bottom: 1px solid var(--text-color);
+    font-size: 36px;
+    padding: 16px;
+    margin: 5px;
+    width: inherit;
+    border-bottom: 1px solid var(--text-color);
 }
 .view-habits-pg .description,
 .goal {
-  font-size: 20px;
-  padding: 10px;
+    font-size: 20px;
+    padding: 10px;
 }
 
 .view-habits-pg .action-btns {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-right: 20px;
 }
 .view-habits-pg .habit-status {
-  font-size: 20px;
-  text-wrap: wrap;
+    font-size: 20px;
+    text-wrap: wrap;
 }
 
+/* HabitCard Styles */
 .habitcard {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: var(--text-color) !important;
-  color: var(--background-color) !important;
-  height: auto;
-  max-height: 180px;
-  width: 320px;
-  max-width: 400px;
-  border-radius: 12px !important;
-  flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--primary-bg-color) !important;
+    color: var(--text-color) !important;
+    height: 60px !important;
+    width: 320px;
+    padding: 3px;
+    border-radius: 24px !important;
 }
 .habitcard .action-icon {
-  font-size: 30px !important;
-  padding: 2px !important;
+    font-size: 30px !important;
+    padding: 2px !important;
 }
 .habits-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  min-width: 100%;
-  max-height: 500px;
-  padding: 10px;
-  padding-bottom: 50px;
-  margin: 10px;
-  overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    min-width: 100%;
+    max-height: 500px;
+    padding: 10px;
+    padding-bottom: 50px;
+    margin: 10px;
+    overflow: auto;
 }
 .habits-list::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
