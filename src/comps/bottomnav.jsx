@@ -6,7 +6,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 /*Component:: <BottomNav/>
     ** Provides UI and Functionality for Bottom Navigation
     for Habitat Application
-    ** Allows users to Navigate through Application Seamlessly
+    ** Allows users to Navigate through Application Seamless
 */
 export default function BottomNav() {
     return (
