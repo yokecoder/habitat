@@ -10,15 +10,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
     return (
-        <div className="app-layout">
+        <div className="app-shell">
             <TopNavBar />
-            <div className="page-layout">
+            <main className="page-layout">
                 <Routes>
                     <Route path="/" element={<Habits />} />
+                    <Route path="/home" element={<Habits />} />
                     <Route path="/tasks" element={<Tasks />} />
                     <Route path="/stats" element={<Stats />} />
+                    <Route path="/analytics" element={<Stats />} />
                 </Routes>
-            </div>
+            </main>
             <BottomNav />
             <ToastContainer
                 position="top-center"
@@ -26,11 +28,11 @@ export default function App() {
                 hideProgressBar
                 closeButton={false}
                 toastStyle={{
-                    backgroundColor: "var(--primary-bg-color)",
-                    color: "var(--text-color)",
-                    borderRadius: "16px",
-                    padding: "12px",
-                    margin: "8px"
+                    backgroundColor: "var(--panel-bg)",
+                    color: "var(--text-primary)",
+                    borderRadius: "14px",
+                    padding: "12px 14px",
+                    boxShadow: "0 12px 28px rgba(15, 23, 42, 0.12)"
                 }}
             />
         </div>

@@ -3,40 +3,23 @@ import HomeIcon from "@mui/icons-material/Home";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import BarChartIcon from "@mui/icons-material/BarChart";
 
-/*Component:: <BottomNav/>
-    ** Provides UI and Functionality for Bottom Navigation
-    for Habitat Application
-    ** Allows users to Navigate through Application Seamless
-*/
 export default function BottomNav() {
     return (
-        <div className="bottomnav">
-            <NavLink
-                to="/"
-                className={({ isActive }) =>
-                    isActive ? "link nav active" : "link nav"
-                }
-            >
-                <HomeIcon className="" />
+        <nav className="bottomnav">
+            <NavLink to="/" className={({ isActive }) => (isActive ? "nav active" : "nav")}>
+                <HomeIcon fontSize="small" />
+                <span>Home</span>
             </NavLink>
 
-            <NavLink
-                to="/tasks"
-                className={({ isActive }) =>
-                    isActive ? "link nav active" : "link nav"
-                }
-            >
-                <ChecklistIcon className="" />
+            <NavLink to="/tasks" className={({ isActive }) => (isActive ? "nav active" : "nav")}>
+                <ChecklistIcon fontSize="small" />
+                <span>Tasks</span>
             </NavLink>
 
-            <NavLink
-                to="/stats"
-                className={({ isActive }) =>
-                    isActive ? "link nav active" : "link nav"
-                }
-            >
-                <BarChartIcon className="" />
+            <NavLink to="/analytics" className={({ isActive }) => (isActive ? "nav active" : "nav")}>
+                <BarChartIcon fontSize="small" />
+                <span>Stats</span>
             </NavLink>
-        </div>
+        </nav>
     );
 }

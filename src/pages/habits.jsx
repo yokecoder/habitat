@@ -1,185 +1,177 @@
 import React, { useState } from "react";
-import { Button, Select, MenuItem } from "@mui/material";
-import { TextField, Stack } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import NumbersIcon from "@mui/icons-material/Numbers";
-import TimerIcon from "@mui/icons-material/Timer";
-import IconButton from "@mui/material/IconButton";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogActions,
+    TextField,
+    IconButton
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import useHabitStore from "../utils/habitlist";
 import HabitCard from "../comps/habitcard";
 
-/* Component:: <Habits />
- ** Represents Habits Page Section of the site
- */
 export default function Habits() {
-    const [showAddHabit, setShowAddHabit] = useState(false);
-    const { habits, getHabitById } = useHabitStore();
+    const [open, setOpen] = useState(false);
+    const { habits } = useHabitStore();
 
     return (
-        <div className="habits">
-            <Button
-                startIcon={<AddIcon />}
-                variant="outlined"
-                className="add-hbt-btn"
-                onClick={() => setShowAddHabit(!showAddHabit)}
-            >
-                Add Habit
-            </Button>
-
-            {showAddHabit && (
-                <AddHabit
-                    onCancel={() => setShowAddHabit(false)}
-                    onadd={() => setShowAddHabit(false)}
-                />
-            )}
+        <div className="habits-page">
+            <header className="page-header">
+                <div>
+                    <h1>Habits</h1>
+                    <span>Daily focus</span>
+                </div>
+                <Button
+                    className="primary-btn"
+                    startIcon={<AddIcon />}
+                    onClick={() => setOpen(true)}
+                >
+                    Add Habit
+                </Button>
+            </header>
 
             <div className="habits-list">
-                {habits.length === 0 && <p> No Habits Added Yet</p>}
-                {habits.length > 0 &&
-                    habits.map(h => <HabitCard key={h.id} id={h.id} />)}
+                {habits.length === 0 ? (
+                    <div className="empty-state">
+                        No habits yet. Create one to begin building momentum.
+                    </div>
+                ) : (
+                    habits.map(habit => <HabitCard key={habit.id} id={habit.id} />)
+                )}
             </div>
+
+            <Dialog
+                open={open}
+                onClose={() => setOpen(false)}
+                maxWidth="sm"
+                fullWidth
+                PaperProps={{ className: "dialog-paper" }}
+            >
+                <DialogContent>
+                    <div className="dialog-header">
+                        <h3>Add Habit</h3>
+                        <IconButton onClick={() => setOpen(false)} size="small">
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
+
+                    <AddHabitForm
+                        onClose={() => setOpen(false)}
+                        onSubmit={() => setOpen(false)}
+                    />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
 
-/*Component:: <AddHabit /> 
-    Params:
-        * onadd :: callback function for adding  habit
-        * onCancel :: callback function for Close Button 
-    ** Provides UI & functionality for Adding a New Habit
-*/
-export function AddHabit({ onadd, onCancel }) {
+function AddHabitForm({ onClose, onSubmit }) {
     const [habitTitle, setHabitTitle] = useState("");
-    const [goalType, setGoalType] = useState("routine"); //goaltypes: task, count, time
-    const [goalCount, setGoalCount] = useState(1);
-    const [goalTime, setGoalTime] = useState("00:05");
+    const [description, setDescription] = useState("");
+    const [goalType, setGoalType] = useState("routine");
+    const [goalValue, setGoalValue] = useState("1");
     const { addHabit } = useHabitStore();
 
     const handleAdd = () => {
-        if (habitTitle === "") {
+        const trimmedTitle = habitTitle.trim();
+
+        if (!trimmedTitle) {
             return;
         }
 
-        let goalValue = null;
-        if (goalType === "count") {
-            goalValue = goalCount;
-        } else if (goalType === "time") {
-            goalValue = goalTime;
-        }
+        const normalizedGoalValue =
+            goalType === "count"
+                ? Number(goalValue) || 1
+                : goalType === "time"
+                    ? goalValue
+                    : null;
 
-        let hbtData = {
-            habitTitle,
+        addHabit({
+            habitTitle: trimmedTitle,
+            habitDescription: description.trim(),
             goalType,
-            goalValue,
+            goalValue: normalizedGoalValue,
             status: null
-        };
-        addHabit(hbtData);
+        });
+
+        setHabitTitle("");
+        setDescription("");
+        setGoalType("routine");
+        setGoalValue("1");
+        onSubmit();
+        onClose();
     };
 
     return (
-        <div className="add-habits-pg">
-            <div>
-                <div className="title-text">New Habit</div>
-                <input
-                    className="inputbox"
-                    type="text"
-                    label="New Habit"
-                    placeholder="Habit"
-                    value={habitTitle}
-                    onChange={e => setHabitTitle(e.target.value)}
-                />
+        <div className="field-stack">
+            <TextField
+                label="Habit title"
+                value={habitTitle}
+                onChange={event => setHabitTitle(event.target.value)}
+                fullWidth
+                variant="outlined"
+            />
+
+            <TextField
+                label="Description"
+                value={description}
+                onChange={event => setDescription(event.target.value)}
+                fullWidth
+                multiline
+                minRows={3}
+                variant="outlined"
+            />
+
+            <div className="goal-row">
+                {[
+                    { key: "routine", label: "Routine" },
+                    { key: "count", label: "Count" },
+                    { key: "time", label: "Time" }
+                ].map(option => (
+                    <button
+                        key={option.key}
+                        type="button"
+                        className={`goal-chip ${goalType === option.key ? "active" : ""}`}
+                        onClick={() => setGoalType(option.key)}
+                    >
+                        {option.label}
+                    </button>
+                ))}
             </div>
 
-            <div>
-                <div className="title-text"> Set Goal </div>
-                <div className="habit-goal-options">
-                    <Button
-                        variant="outlined"
-                        className="btn-outlined"
-                        startIcon={<CheckCircleIcon />}
-                        onClick={() => setGoalType("routine")}
-                    >
-                        Routine
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        className="btn-outlined"
-                        startIcon={<NumbersIcon />}
-                        onClick={() => setGoalType("count")}
-                    >
-                        Count
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        className="btn-outlined"
-                        startIcon={<TimerIcon />}
-                        onClick={() => setGoalType("time")}
-                    >
-                        Time
-                    </Button>
-                </div>
-            </div>
-
-            <div className="habit-goal-input">
-                {goalType === "count" && (
-                    <div className="goal-count">
-                        <input
-                            type="number"
-                            min="1"
-                            max="100"
-                            className="inputbox2"
-                            placeholder="Count"
-                            value={goalCount}
-                            onChange={e => setGoalCount(e.target.value)}
-                        />
-                        <label className="title-text">time(s)</label>
-                    </div>
-                )}
-                {/*Todo: Timer Input Design */}
-                {/* {goalType === "time" && (
-                    <Stack direction="row" space={1} alignItems="center">
-                        <input
-                            type="number"
-                            min={0}
-                            max={59}
-                            placeholder="Hours"
-                        />
-                        <input
-                            type="number"
-                            min={0}
-                            max={59}
-                            placeholder="Minutes"
-                        />
-                    </Stack>
-                )}*/}
-            </div>
-
-            {/*Todo: Repeatability Selection option*/}
-            {/* }<div className="repeatability-option">
-                <span className="title-text">Repeatability</span>
-                <div>Selected Weekdays</div>
-            </div>*/}
-
-            <div className="actions">
-                <Button
+            {goalType === "count" && (
+                <TextField
+                    label="Target count"
+                    type="number"
+                    min="1"
+                    value={goalValue}
+                    onChange={event => setGoalValue(event.target.value)}
+                    fullWidth
                     variant="outlined"
-                    className="btn-outlined"
-                    onClick={onCancel}
-                >
+                />
+            )}
+
+            {goalType === "time" && (
+                <TextField
+                    label="Target duration"
+                    value={goalValue}
+                    onChange={event => setGoalValue(event.target.value)}
+                    placeholder="e.g. 20 mins"
+                    fullWidth
+                    variant="outlined"
+                />
+            )}
+
+            <DialogActions className="dialog-actions" sx={{ padding: 0 }}>
+                <button type="button" className="ghost-btn" onClick={onClose}>
                     Cancel
-                </Button>
-                <Button
-                    variant="contained"
-                    className="btn"
-                    onClick={() => {
-                        handleAdd();
-                        onadd();
-                    }}
-                >
-                    Add Habit
-                </Button>
-            </div>
+                </button>
+                <button type="button" className="primary-btn" onClick={handleAdd}>
+                    Save Habit
+                </button>
+            </DialogActions>
         </div>
     );
 }

@@ -1,153 +1,109 @@
-import {
-    Card,
-    CardContent,
-    CardActions,
-    Typography,
-    Button
-} from "@mui/material";
+import { useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import useHabitStore from "../utils/habitlist";
-import { useState } from "react";
 
-/*Component :: <HabitCard />
-    * Params
-        * id : unique id for habit (used to fetch habit details)
-    ** Presents Details of Habits in a Crisp Card like interface
-    ** Allows Users to Get a Detailed view of habit of invoking 
-    <viewHabit /> Component by clicking on it 
-    ** Allows Users to set the status of habit
-*/
 export default function HabitCard({ id }) {
-    const [viewHabit, setViewHabit] = useState(false);
-    const { getHabitById, updateStatus } = useHabitStore();
-    const currHabit = getHabitById(id);
+    const [expanded, setExpanded] = useState(false);
+    const { getHabitById, updateStatus, removeHabit } = useHabitStore();
+    const habit = getHabitById(id);
+
+    if (!habit) return null;
+
+    const goalLabel =
+        habit.goalType === "count"
+            ? `Target ${habit.goalValue} times`
+            : habit.goalType === "time"
+                ? `Target ${habit.goalValue}`
+                : "Daily routine";
+
+    const statusClass =
+        habit.status === true ? "done" : habit.status === false ? "missed" : "pending";
 
     return (
-        <>
-            <Card className="habitcard">
-                <CardContent
-                    sx={{ width: "180px" }}
-                    onClick={() => setViewHabit(true)}
-                >
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            whiteSpace: "nowrap",
-                            overflowX: "auto",
-                            scrollbarWidth: "none", // Firefox
-                            msOverflowStyle: "none", // Internet Explorer and Edge
-                            "&::-webkit-scrollbar": {
-                                display: "none" // Chrome, Safari, Opera
-                            }
-                        }}
+        <article className="habit-card">
+            <div className="habit-card-inner">
+                <div className="habit-card-top">
+                    <div className="habit-card-main">
+                        <h3 className="habit-card-title">{habit.habitTitle}</h3>
+                        <div className="habit-card-meta">
+                            <span className="goal-pill">{goalLabel}</span>
+                            <span className={`status-pill ${statusClass}`}>
+                                {habit.status === true
+                                    ? "Done"
+                                    : habit.status === false
+                                        ? "Missed"
+                                        : "In progress"}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="small-icon-btn"
+                        onClick={() => setExpanded(!expanded)}
+                        aria-label="Toggle habit details"
                     >
-                        {currHabit.habitTitle}
-                    </Typography>
-                    <Typography variant="body2">
-                        {currHabit.goalType === "routine" && "routine"}
-                        {currHabit.goalType === "count" &&
-                            `${currHabit.goalValue} time(s)`}
-                    </Typography>
-                </CardContent>
+                        <ExpandMoreIcon
+                            style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                        />
+                    </button>
+                </div>
 
-                <CardActions>
-                    {currHabit.status === true && (
-                        <div
-                            style={{
-                                color: "green",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "5px"
-                            }}
+                <div className="habit-card-actions">
+                    <div className="habit-button-row">
+                        <button
+                            type="button"
+                            className="small-icon-btn success"
+                            onClick={() => updateStatus(id, true)}
+                            aria-label="Mark habit done"
                         >
-                            <CheckCircleIcon />
-                            <span>Completed</span>
-                        </div>
-                    )}
-                    {currHabit.status === false && (
-                        <div
-                            style={{
-                                color: "red",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "5px"
-                            }}
+                            <CheckCircleIcon fontSize="small" />
+                        </button>
+                        <button
+                            type="button"
+                            className="small-icon-btn danger"
+                            onClick={() => updateStatus(id, false)}
+                            aria-label="Mark habit missed"
                         >
-                            <CancelIcon />
-                            <span>Skipped</span>
+                            <CancelIcon fontSize="small" />
+                        </button>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="ghost-btn"
+                        onClick={() => removeHabit(id)}
+                    >
+                        <DeleteOutlineIcon fontSize="small" />
+                    </button>
+                </div>
+            </div>
+
+            {expanded && (
+                <div className="habit-details">
+                    {habit.habitDescription ? <p>{habit.habitDescription}</p> : <p>No description added yet.</p>}
+
+                    <div className="detail-grid">
+                        <div className="detail-box">
+                            <span className="label">Goal</span>
+                            <strong>{goalLabel}</strong>
                         </div>
-                    )}
-                    {currHabit.status === null && (
-                        <>
-                            <CheckCircleIcon
-                                className="action-icon"
-                                onClick={() => updateStatus(id, true)}
-                            />
-                            <CancelIcon
-                                className="action-icon"
-                                onClick={() => updateStatus(id, false)}
-                            />
-                        </>
-                    )}
-                </CardActions>
-            </Card>
-            {viewHabit && (
-                <ViewHabit habitId={id} onClose={() => setViewHabit(false)} />
+                        <div className="detail-box">
+                            <span className="label">Status</span>
+                            <strong>
+                                {habit.status === true
+                                    ? "Completed"
+                                    : habit.status === false
+                                        ? "Missed"
+                                        : "Pending"}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
             )}
-        </>
-    );
-}
-
-/*Component:: <ViewHabit /> 
-  PARAMS::
-    * habitId: unique id of habit (used to fetch habit details based on its id)
-    * onClose: callback function to close actions of the page
-    
-  ** Provides Detailed Information about the habit
-  ** Provides Stats of the habit 
-  ** allows users to make changes on their habit
-*/
-export function ViewHabit({ habitId, onClose }) {
-    const { getHabitById, removeHabit } = useHabitStore();
-
-    const currentHabit = getHabitById(habitId);
-
-    return (
-        <div className="view-habits-pg">
-            <span className="title">{currentHabit.habitTitle}</span>
-            {currentHabit.habitDescription && (
-                <span className="description">
-                    {currentHabit.habitDescription}
-                </span>
-            )}
-            {currentHabit.goalType === "amount" ? (
-                <span className="goal">{currentHabit.goalValue} times</span>
-            ) : (
-                ""
-            )}
-
-            <div className="habit-status">
-                Status :
-                {currentHabit.status ? (
-                    <p>Completed for Today</p>
-                ) : currentHabit.status === false ? (
-                    <p>Skipped for Today</p>
-                ) : (
-                    <p>Yet to Complete</p>
-                )}
-            </div>
-            <div className="action-btns">
-                <Button onClick={onClose} className="btn">
-                    Close
-                </Button>
-                <Button className="btn">Edit Habit</Button>
-                <Button className="btn" onClick={() => removeHabit(habitId)}>
-                    Delete Habit
-                </Button>
-            </div>
-        </div>
+        </article>
     );
 }
