@@ -1,0 +1,1998 @@
+diff --git a/src/App.css b/src/App.css
+index 54a063d..0379f9a 100644
+--- a/src/App.css
++++ b/src/App.css
+@@ -1,38 +1,131 @@
++/* =========================================================================
++   Habitat — Design Tokens
++   "Build your environment. Build yourself."
++   ========================================================================= */
++
++:root {
++    /* Typography scale */
++    --font-sans: Inter, "Segoe UI", sans-serif;
++    --text-display: 700 clamp(1.9rem, 5vw, 2.6rem) / 1.1 var(--font-sans);
++    --text-h1: 700 clamp(1.6rem, 4vw, 2.1rem) / 1.15 var(--font-sans);
++    --text-h2: 600 1.25rem / 1.25 var(--font-sans);
++    --text-h3: 600 1.05rem / 1.3 var(--font-sans);
++    --text-body: 400 0.95rem / 1.5 var(--font-sans);
++    --text-small: 500 0.82rem / 1.4 var(--font-sans);
++    --text-caption: 600 0.72rem / 1.3 var(--font-sans);
++    --text-label: 600 0.78rem / 1.3 var(--font-sans);
++
++    /* Spacing scale */
++    --space-1: 4px;
++    --space-2: 8px;
++    --space-3: 12px;
++    --space-4: 16px;
++    --space-5: 20px;
++    --space-6: 24px;
++    --space-7: 32px;
++    --space-8: 40px;
++
++    /* Radius scale */
++    --radius-sm: 10px;
++    --radius-md: 14px;
++    --radius-lg: 18px;
++    --radius-xl: 22px;
++    --radius-pill: 999px;
++
++    /* Elevation */
++    --elevation-1: 0 2px 8px rgba(15, 23, 20, 0.05);
++    --elevation-2: 0 10px 24px rgba(15, 23, 20, 0.08);
++    --elevation-3: 0 18px 40px rgba(15, 23, 20, 0.12);
++
++    /* Motion */
++    --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
++    --duration-fast: 140ms;
++    --duration-base: 220ms;
++}
++
+ :root[data-theme="light"] {
+-    --bg: #f5f7f3;
++    --bg: #f6f7f3;
+     --bg-elevated: #ffffff;
+-    --panel-bg: #eef3ee;
+-    --panel-strong: #e5ede6;
+-    --text-primary: #1c2321;
+-    --text-secondary: #5b6b67;
+-    --accent: #7fb88d;
+-    --accent-strong: #4b8f67;
+-    --accent-soft: rgba(127, 184, 141, 0.16);
+-    --outline: rgba(25, 35, 33, 0.08);
+-    --success: #3ca978;
+-    --warning: #e8b75f;
+-    --shadow: 0 18px 40px rgba(17, 24, 39, 0.08);
++    --panel-bg: #eef1eb;
++    --panel-strong: #e4e9df;
++    --text-primary: #1b2320;
++    --text-secondary: #61706a;
++    --text-tertiary: #8c9891;
++
++    --accent: #6ea87c;
++    --accent-strong: #47825a;
++    --accent-soft: rgba(110, 168, 124, 0.14);
++
++    --outline: rgba(20, 30, 26, 0.09);
++    --outline-strong: rgba(20, 30, 26, 0.16);
++
++    --success: #3f9d6c;
++    --success-soft: rgba(63, 157, 108, 0.12);
++    --warning: #c98a2e;
++    --warning-soft: rgba(201, 138, 46, 0.12);
++    --error: #c1523f;
++    --error-soft: rgba(193, 82, 63, 0.1);
++    --info: #3a7ea8;
++    --info-soft: rgba(58, 126, 168, 0.1);
++
++    --shadow: var(--elevation-2);
+ }
+ 
+ :root[data-theme="dark"] {
+-    --bg: #111714;
+-    --bg-elevated: #181f1c;
+-    --panel-bg: #1e2925;
+-    --panel-strong: #24312d;
+-    --text-primary: #edf3ef;
+-    --text-secondary: #a9b9b2;
+-    --accent: #8dc9a4;
+-    --accent-strong: #67bb8d;
+-    --accent-soft: rgba(141, 201, 164, 0.12);
+-    --outline: rgba(255, 255, 255, 0.08);
+-    --success: #54d09d;
+-    --warning: #efc671;
+-    --shadow: 0 18px 40px rgba(0, 0, 0, 0.26);
++    --bg: #141815;
++    --bg-elevated: #1b201c;
++    --panel-bg: #212823;
++    --panel-strong: #29322c;
++    --text-primary: #edf1ec;
++    --text-secondary: #a4b1a9;
++    --text-tertiary: #798780;
++
++    --accent: #7dbb8f;
++    --accent-strong: #5aa070;
++    --accent-soft: rgba(125, 187, 143, 0.14);
++
++    --outline: rgba(255, 255, 255, 0.07);
++    --outline-strong: rgba(255, 255, 255, 0.14);
++
++    --success: #5cb587;
++    --success-soft: rgba(92, 181, 135, 0.14);
++    --warning: #d6a256;
++    --warning-soft: rgba(214, 162, 86, 0.14);
++    --error: #d0705f;
++    --error-soft: rgba(208, 112, 95, 0.14);
++    --info: #5c9bc0;
++    --info-soft: rgba(92, 155, 192, 0.14);
++
++    --shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+ }
+ 
++/* =========================================================================
++   Reset & base
++   ========================================================================= */
++
+ * {
+     box-sizing: border-box;
+-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
++}
++
++@media (prefers-reduced-motion: no-preference) {
++    * {
++        transition: background-color var(--duration-fast) ease,
++            color var(--duration-fast) ease,
++            border-color var(--duration-fast) ease,
++            box-shadow var(--duration-fast) ease,
++            transform var(--duration-fast) var(--ease-standard);
++    }
++}
++
++@media (prefers-reduced-motion: reduce) {
++    *,
++    *::before,
++    *::after {
++        animation-duration: 0.001ms !important;
++        animation-iteration-count: 1 !important;
++        transition-duration: 0.001ms !important;
++        scroll-behavior: auto !important;
++    }
+ }
+ 
+ html,
+@@ -41,7 +134,7 @@ body,
+     margin: 0;
+     min-height: 100%;
+     height: 100%;
+-    font-family: Inter, "Segoe UI", sans-serif;
++    font: var(--text-body);
+     background: var(--bg);
+     color: var(--text-primary);
+ }
+@@ -60,9 +153,19 @@ button {
+     cursor: pointer;
+ }
+ 
++:focus-visible {
++    outline: 2px solid var(--accent-strong);
++    outline-offset: 2px;
++    border-radius: var(--radius-sm);
++}
++
++/* =========================================================================
++   App shell
++   ========================================================================= */
++
+ .app-shell {
+     min-height: 100vh;
+-    background: linear-gradient(180deg, var(--bg) 0%, rgba(255, 255, 255, 0.02) 100%);
++    background: var(--bg);
+     display: flex;
+     flex-direction: column;
+ }
+@@ -70,7 +173,7 @@ button {
+ .page-layout {
+     flex: 1;
+     overflow-y: auto;
+-    padding: 18px 18px 120px;
++    padding: var(--space-5) var(--space-5) calc(120px + env(safe-area-inset-bottom));
+     scrollbar-width: none;
+ }
+ 
+@@ -78,6 +181,8 @@ button {
+     display: none;
+ }
+ 
++/* Top nav ---------------------------------------------------------------- */
++
+ .topnavbar {
+     position: sticky;
+     top: 0;
+@@ -85,8 +190,8 @@ button {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+-    padding: 14px 18px 10px;
+-    background: rgba(17, 23, 20, 0.02);
++    padding: calc(var(--space-4) + env(safe-area-inset-top)) var(--space-5) var(--space-3);
++    background: color-mix(in srgb, var(--bg) 92%, transparent);
+     backdrop-filter: blur(10px);
+     border-bottom: 1px solid var(--outline);
+ }
+@@ -94,64 +199,65 @@ button {
+ .brand {
+     display: flex;
+     align-items: center;
+-    gap: 12px;
++    gap: var(--space-3);
+ }
+ 
+ .brand-mark {
+     width: 38px;
+     height: 38px;
+-    border-radius: 12px;
++    flex-shrink: 0;
++    border-radius: var(--radius-md);
+     display: grid;
+     place-items: center;
+-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
++    background: var(--accent-strong);
+     color: #fff;
+     font-weight: 700;
+-    box-shadow: var(--shadow);
++    box-shadow: var(--elevation-1);
+ }
+ 
+ .brand-copy {
+     display: flex;
+     flex-direction: column;
+-    gap: 2px;
++    gap: 1px;
+ }
+ 
+ .brand-subtitle {
+-    font-size: 10px;
+-    letter-spacing: 0.12em;
++    font: var(--text-caption);
++    letter-spacing: 0.08em;
+     text-transform: uppercase;
+     color: var(--text-secondary);
+ }
+ 
+ .title-text {
+-    font-size: 1.45rem;
++    font-size: 1.35rem;
+     font-weight: 700;
+-    letter-spacing: -0.04em;
++    letter-spacing: -0.03em;
+ }
+ 
+ .theme-toggle {
+-    border: 1px solid var(--outline);
+-    background: var(--bg-elevated);
+-    color: var(--text-primary);
+-    border-radius: 12px;
++    border: 1px solid var(--outline) !important;
++    background: var(--bg-elevated) !important;
++    color: var(--text-primary) !important;
++    border-radius: var(--radius-md) !important;
+     width: 42px;
+     height: 42px;
+-    display: grid;
+-    place-items: center;
+ }
+ 
++/* Bottom nav -------------------------------------------------------------- */
++
+ .bottomnav {
+     position: fixed;
+     left: 50%;
+-    bottom: 18px;
++    bottom: calc(18px + env(safe-area-inset-bottom));
+     transform: translateX(-50%);
+-    width: min(86vw, 420px);
++    width: min(90vw, 420px);
+     display: grid;
+     grid-template-columns: repeat(3, minmax(0, 1fr));
+-    gap: 10px;
+-    background: rgba(17, 23, 20, 0.76);
+-    border: 1px solid rgba(255, 255, 255, 0.06);
+-    padding: 10px;
+-    border-radius: 20px;
++    gap: var(--space-2);
++    background: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
++    border: 1px solid var(--outline);
++    padding: var(--space-2);
++    border-radius: var(--radius-xl);
+     backdrop-filter: blur(18px);
+     box-shadow: var(--shadow);
+ }
+@@ -160,20 +266,24 @@ button {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+-    gap: 7px;
+-    padding: 10px 12px;
+-    color: rgba(255, 255, 255, 0.7);
++    gap: 6px;
++    min-height: 44px;
++    padding: var(--space-2) var(--space-3);
++    color: var(--text-secondary);
+     text-decoration: none;
+-    border-radius: 14px;
+-    font-size: 0.78rem;
+-    font-weight: 600;
++    border-radius: var(--radius-md);
++    font: var(--text-small);
+ }
+ 
+ .nav.active {
+-    background: rgba(255, 255, 255, 0.12);
+-    color: #ffffff;
++    background: var(--accent-soft);
++    color: var(--accent-strong);
+ }
+ 
++/* =========================================================================
++   Page layout
++   ========================================================================= */
++
+ .habits-page,
+ .tasks-page,
+ .stats-page {
+@@ -181,161 +291,274 @@ button {
+     margin: 0 auto;
+     display: flex;
+     flex-direction: column;
+-    gap: 20px;
++    gap: var(--space-5);
+ }
+ 
+ .page-header {
+     display: flex;
+     align-items: flex-end;
+     justify-content: space-between;
+-    gap: 10px;
+-    padding-top: 8px;
++    gap: var(--space-3);
++    padding-top: var(--space-1);
+ }
+ 
+ .page-header h1,
+ .page-header h2 {
+     margin: 0;
+-    font-size: clamp(1.8rem, 4vw, 2.7rem);
+-    letter-spacing: -0.06em;
++    font: var(--text-display);
++    letter-spacing: -0.03em;
+ }
+ 
+ .page-header span {
+     color: var(--text-secondary);
+-    font-size: 0.9rem;
++    font: var(--text-small);
+ }
+ 
++/* Buttons ------------------------------------------------------------------ */
++
+ .primary-btn,
+ .secondary-btn,
+ .ghost-btn,
+-.goal-chip,
+-.task-toggle-btn {
++.goal-chip {
++    display: inline-flex;
++    align-items: center;
++    justify-content: center;
++    gap: var(--space-2);
++    min-height: 44px;
+     border: none;
+-    border-radius: 14px;
++    border-radius: var(--radius-md);
+     font-weight: 600;
+-    font-size: 0.95rem;
++    font-size: 0.9rem;
+ }
+ 
+ .primary-btn {
+-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
++    background: var(--accent-strong);
+     color: #fff;
+-    padding: 12px 18px;
+-    box-shadow: 0 12px 22px rgba(88, 157, 110, 0.2);
++    padding: 0 var(--space-4);
++    box-shadow: var(--elevation-1);
++}
++
++.primary-btn:hover {
++    background: var(--accent);
++}
++
++.primary-btn.icon-only {
++    width: 44px;
++    padding: 0;
+ }
+ 
+ .secondary-btn {
+     background: var(--panel-bg);
+     color: var(--text-primary);
+     border: 1px solid var(--outline);
+-    padding: 12px 18px;
++    padding: 0 var(--space-4);
+ }
+ 
+ .ghost-btn {
+     background: transparent;
+     color: var(--text-primary);
+     border: 1px solid var(--outline);
+-    padding: 10px 14px;
++    padding: 0 var(--space-3);
+ }
+ 
++.ghost-btn:hover {
++    background: var(--panel-bg);
++}
++
++.ghost-btn.icon-only {
++    width: 40px;
++    height: 40px;
++    min-height: 40px;
++    padding: 0;
++}
++
++.ghost-btn.danger-text {
++    color: var(--error);
++    border-color: var(--error-soft);
++}
++
++/* =========================================================================
++   Today's progress summary
++   ========================================================================= */
++
++.progress-summary {
++    display: flex;
++    align-items: center;
++    gap: var(--space-4);
++    background: var(--bg-elevated);
++    border: 1px solid var(--outline);
++    border-radius: var(--radius-xl);
++    padding: var(--space-4) var(--space-5);
++    box-shadow: var(--elevation-1);
++}
++
++.progress-ring {
++    --ring-percent: 0;
++    width: 56px;
++    height: 56px;
++    flex-shrink: 0;
++    border-radius: 50%;
++    display: grid;
++    place-items: center;
++    background: conic-gradient(
++        var(--accent-strong) calc(var(--ring-percent) * 1%),
++        var(--panel-strong) 0
++    );
++}
++
++.progress-ring span {
++    width: 42px;
++    height: 42px;
++    border-radius: 50%;
++    background: var(--bg-elevated);
++    display: grid;
++    place-items: center;
++    font-size: 0.78rem;
++    font-weight: 700;
++}
++
++.progress-summary-copy {
++    display: flex;
++    flex-direction: column;
++    gap: 2px;
++}
++
++.progress-summary-title {
++    font: var(--text-caption);
++    text-transform: uppercase;
++    letter-spacing: 0.06em;
++    color: var(--text-secondary);
++}
++
++.progress-summary-copy strong {
++    font: var(--text-h2);
++}
++
++/* =========================================================================
++   Habit card
++   ========================================================================= */
++
+ .habits-list,
+ .task-list {
+     display: flex;
+     flex-direction: column;
+-    gap: 14px;
++    gap: var(--space-3);
+ }
+ 
+ .habit-card {
+     background: var(--bg-elevated);
+     border: 1px solid var(--outline);
+-    border-radius: 22px;
+-    box-shadow: var(--shadow);
++    border-radius: var(--radius-xl);
++    box-shadow: var(--elevation-1);
+     overflow: hidden;
+ }
+ 
++.habit-card.is-done {
++    border-color: var(--success-soft);
++}
++
+ .habit-card-inner {
+-    padding: 18px 18px 14px;
++    padding: var(--space-4);
+ }
+ 
+ .habit-card-top {
+     display: flex;
+-    align-items: center;
+-    justify-content: space-between;
+-    gap: 12px;
++    align-items: flex-start;
++    gap: var(--space-3);
++}
++
++.habit-icon {
++    width: 40px;
++    height: 40px;
++    flex-shrink: 0;
++    border-radius: var(--radius-md);
++    display: grid;
++    place-items: center;
++    background: var(--accent-soft);
++    color: var(--accent-strong);
++    font-weight: 700;
++    font-size: 0.85rem;
+ }
+ 
+ .habit-card-main {
+     flex: 1;
++    min-width: 0;
+ }
+ 
+ .habit-card-title {
+     margin: 0;
+-    font-size: 1.2rem;
+-    letter-spacing: -0.04em;
++    font: var(--text-h3);
++    letter-spacing: -0.02em;
+ }
+ 
+ .habit-card-meta {
+     display: flex;
+     align-items: center;
+-    gap: 8px;
++    gap: var(--space-2);
+     flex-wrap: wrap;
+-    margin-top: 8px;
++    margin-top: var(--space-2);
+     color: var(--text-secondary);
+-    font-size: 0.82rem;
++    font: var(--text-small);
+ }
+ 
+-.goal-pill {
++.goal-pill,
++.streak-pill,
++.status-pill {
+     display: inline-flex;
+     align-items: center;
+-    gap: 6px;
+-    border-radius: 999px;
+-    padding: 6px 10px;
+-    background: var(--accent-soft);
+-    color: var(--accent-strong);
+-    font-weight: 600;
++    gap: 4px;
++    border-radius: var(--radius-pill);
++    padding: 4px 10px;
++    font: var(--text-caption);
+ }
+ 
+-.status-pill {
+-    display: inline-flex;
+-    align-items: center;
+-    gap: 6px;
+-    border-radius: 999px;
+-    padding: 6px 10px;
+-    font-weight: 600;
+-    font-size: 0.76rem;
++.goal-pill {
++    background: var(--panel-bg);
++    color: var(--text-secondary);
++}
++
++.streak-pill {
++    background: var(--warning-soft);
++    color: var(--warning);
+ }
+ 
+ .status-pill.done {
+-    background: rgba(84, 208, 157, 0.12);
++    background: var(--success-soft);
+     color: var(--success);
+ }
+ 
+ .status-pill.pending {
+-    background: rgba(239, 198, 113, 0.12);
+-    color: var(--warning);
++    background: var(--panel-bg);
++    color: var(--text-secondary);
+ }
+ 
+ .status-pill.missed {
+-    background: rgba(239, 99, 99, 0.12);
+-    color: #e66a6a;
++    background: var(--error-soft);
++    color: var(--error);
++}
++
++.expand-btn svg {
++    transition: transform var(--duration-base) var(--ease-standard);
+ }
+ 
+ .habit-card-actions {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+-    gap: 10px;
+-    margin-top: 16px;
++    gap: var(--space-3);
++    margin-top: var(--space-4);
+ }
+ 
+ .habit-button-row {
+     display: flex;
+     align-items: center;
+-    gap: 8px;
++    gap: var(--space-2);
+ }
+ 
+ .small-icon-btn {
+-    width: 34px;
+-    height: 34px;
+-    border-radius: 10px;
++    width: 40px;
++    height: 40px;
++    border-radius: var(--radius-sm);
+     border: 1px solid var(--outline);
+     background: var(--panel-bg);
+     color: var(--text-primary);
+@@ -344,25 +567,34 @@ button {
+ }
+ 
+ .small-icon-btn.success {
+-    background: rgba(84, 208, 157, 0.1);
+-    border-color: rgba(84, 208, 157, 0.18);
+     color: var(--success);
+ }
+ 
++.small-icon-btn.success.is-active {
++    background: var(--success);
++    border-color: var(--success);
++    color: #fff;
++    transform: scale(1.04);
++}
++
+ .small-icon-btn.danger {
+-    background: rgba(230, 106, 106, 0.08);
+-    border-color: rgba(230, 106, 106, 0.18);
+-    color: #e66a6a;
++    color: var(--error);
++}
++
++.small-icon-btn.danger.is-active {
++    background: var(--error);
++    border-color: var(--error);
++    color: #fff;
+ }
+ 
+ .habit-details {
+     border-top: 1px solid var(--outline);
+-    padding: 16px 18px 18px;
+-    background: rgba(127, 184, 141, 0.03);
++    padding: var(--space-4);
++    background: var(--panel-bg);
+ }
+ 
+ .habit-details p {
+-    margin: 0 0 10px;
++    margin: 0 0 var(--space-3);
+     color: var(--text-secondary);
+     line-height: 1.6;
+ }
+@@ -370,41 +602,58 @@ button {
+ .detail-grid {
+     display: grid;
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+-    gap: 10px;
+-    margin-top: 14px;
++    gap: var(--space-2);
+ }
+ 
+ .detail-box {
+-    background: var(--panel-bg);
++    background: var(--bg-elevated);
+     border: 1px solid var(--outline);
+-    border-radius: 14px;
+-    padding: 10px 12px;
++    border-radius: var(--radius-md);
++    padding: var(--space-3);
+ }
+ 
+ .detail-box .label {
+     display: block;
+     color: var(--text-secondary);
+     margin-bottom: 4px;
+-    font-size: 0.72rem;
++    font: var(--text-caption);
+     text-transform: uppercase;
+-    letter-spacing: 0.08em;
++    letter-spacing: 0.06em;
+ }
+ 
+ .detail-box strong {
+     font-size: 0.95rem;
+ }
+ 
++/* Empty states ------------------------------------------------------------ */
++
+ .empty-state {
+     background: var(--bg-elevated);
+-    border: 1px dashed var(--outline);
+-    border-radius: 20px;
+-    padding: 28px 18px;
++    border: 1px dashed var(--outline-strong);
++    border-radius: var(--radius-xl);
++    padding: var(--space-7) var(--space-5);
+     text-align: center;
+     color: var(--text-secondary);
++    display: flex;
++    flex-direction: column;
++    align-items: center;
++    gap: var(--space-3);
+ }
+ 
++.empty-state strong {
++    font: var(--text-h2);
++    color: var(--text-primary);
++}
++
++.empty-state p {
++    margin: 0;
++    max-width: 32ch;
++}
++
++/* Dialog / form ------------------------------------------------------------ */
++
+ .dialog-paper {
+-    border-radius: 26px !important;
++    border-radius: var(--radius-xl) !important;
+     background: var(--bg-elevated) !important;
+     color: var(--text-primary) !important;
+     border: 1px solid var(--outline);
+@@ -414,169 +663,182 @@ button {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+-    margin-bottom: 6px;
++    margin-bottom: var(--space-2);
+ }
+ 
+ .dialog-header h3 {
+     margin: 0;
+-    font-size: 1.4rem;
+-    letter-spacing: -0.05em;
++    font: var(--text-h1);
+ }
+ 
+ .field-stack {
+     display: flex;
+     flex-direction: column;
+-    gap: 18px;
+-    margin-top: 8px;
++    gap: var(--space-4);
++    margin-top: var(--space-2);
+ }
+ 
+ .goal-row {
+     display: grid;
+     grid-template-columns: repeat(3, minmax(0, 1fr));
+-    gap: 10px;
++    gap: var(--space-2);
+ }
+ 
+ .goal-chip {
+     background: var(--panel-bg);
+     color: var(--text-primary);
+     border: 1px solid var(--outline);
+-    padding: 12px 10px;
+ }
+ 
+ .goal-chip.active {
+     background: var(--accent-soft);
+-    border-color: rgba(127, 184, 141, 0.25);
++    border-color: var(--accent);
+     color: var(--accent-strong);
+ }
+ 
+ .dialog-actions {
+     display: flex;
+     justify-content: flex-end;
+-    gap: 12px;
+-    margin-top: 22px;
++    gap: var(--space-3);
++    margin-top: var(--space-5);
++}
++
++/* =========================================================================
++   Tasks page
++   ========================================================================= */
++
++.task-form {
++    display: flex;
++    gap: var(--space-2);
++    align-items: center;
++    background: var(--bg-elevated);
++    border: 1px solid var(--outline);
++    border-radius: var(--radius-lg);
++    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
++}
++
++.task-form input {
++    flex: 1;
++    border: none;
++    background: transparent;
++    color: var(--text-primary);
++    outline: none;
++    font-size: 0.95rem;
++    min-height: 40px;
+ }
+ 
+ .task-card {
+     background: var(--bg-elevated);
+     border: 1px solid var(--outline);
+-    border-radius: 18px;
+-    padding: 14px 16px;
++    border-radius: var(--radius-lg);
++    padding: var(--space-3) var(--space-4);
+     display: flex;
+     align-items: center;
+-    justify-content: space-between;
+-    gap: 12px;
++    gap: var(--space-3);
++}
++
++.task-card.is-done {
++    border-color: var(--success-soft);
++}
++
++.task-check {
++    width: 28px;
++    height: 28px;
++    flex-shrink: 0;
++    border-radius: var(--radius-sm);
++    border: 1.5px solid var(--outline-strong);
++    background: transparent;
++    color: #fff;
++    display: grid;
++    place-items: center;
++}
++
++.task-check.checked {
++    background: var(--success);
++    border-color: var(--success);
+ }
+ 
+ .task-text {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+-    gap: 4px;
++    gap: 2px;
+ }
+ 
+ .task-text strong {
+-    font-size: 1rem;
++    font-size: 0.98rem;
+ }
+ 
+ .task-text small {
+     color: var(--text-secondary);
++    font: var(--text-small);
+ }
+ 
+-.task-toggle-btn {
+-    border-radius: 12px;
+-    background: var(--panel-bg);
+-    border: 1px solid var(--outline);
+-    color: var(--text-primary);
+-    padding: 10px 12px;
+-}
+-
+-.task-toggle-btn.done {
+-    background: rgba(84, 208, 157, 0.12);
+-    border-color: rgba(84, 208, 157, 0.18);
+-    color: var(--success);
+-}
+-
+-.task-form {
+-    display: flex;
+-    gap: 10px;
+-    align-items: center;
+-    background: var(--bg-elevated);
+-    border: 1px solid var(--outline);
+-    border-radius: 18px;
+-    padding: 10px 12px;
+-}
+-
+-.task-form input {
+-    flex: 1;
+-    border: none;
+-    background: transparent;
+-    color: var(--text-primary);
+-    outline: none;
+-    font-size: 0.96rem;
+-}
++/* =========================================================================
++   Stats page
++   ========================================================================= */
+ 
+ .stats-grid {
+     display: grid;
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+-    gap: 14px;
++    gap: var(--space-3);
+ }
+ 
+ .stat-card {
+     background: var(--bg-elevated);
+     border: 1px solid var(--outline);
+-    border-radius: 22px;
+-    padding: 18px;
+-    box-shadow: var(--shadow);
++    border-radius: var(--radius-xl);
++    padding: var(--space-4);
++    box-shadow: var(--elevation-1);
+ }
+ 
+ .stat-card .label {
+     color: var(--text-secondary);
+-    font-size: 0.75rem;
++    font: var(--text-caption);
+     text-transform: uppercase;
+-    letter-spacing: 0.1em;
++    letter-spacing: 0.08em;
+ }
+ 
+ .stat-card .value {
+     display: block;
+-    margin-top: 10px;
+-    font-size: clamp(1.8rem, 5vw, 2.5rem);
++    margin-top: var(--space-2);
++    font-size: clamp(1.6rem, 5vw, 2.2rem);
+     font-weight: 700;
+-    letter-spacing: -0.06em;
++    letter-spacing: -0.03em;
+ }
+ 
+ .stat-card .detail {
+     display: inline-flex;
+-    margin-top: 10px;
++    margin-top: var(--space-2);
+     align-items: center;
+-    gap: 6px;
++    gap: 4px;
+     color: var(--accent-strong);
+-    font-size: 0.8rem;
+-    font-weight: 600;
++    font: var(--text-small);
+ }
+ 
+ .panel {
+     background: var(--bg-elevated);
+     border: 1px solid var(--outline);
+-    border-radius: 22px;
+-    padding: 18px;
+-    box-shadow: var(--shadow);
++    border-radius: var(--radius-xl);
++    padding: var(--space-4);
++    box-shadow: var(--elevation-1);
+ }
+ 
+ .panel h3 {
+-    margin: 0 0 16px;
+-    font-size: 1.1rem;
++    margin: 0 0 var(--space-4);
++    font: var(--text-h2);
+ }
+ 
+ .progress-list {
+     display: flex;
+     flex-direction: column;
+-    gap: 16px;
++    gap: var(--space-4);
+ }
+ 
+ .progress-item {
+     display: flex;
+     flex-direction: column;
+-    gap: 10px;
++    gap: var(--space-2);
+ }
+ 
+ .progress-row {
+@@ -584,12 +846,12 @@ button {
+     align-items: center;
+     justify-content: space-between;
+     color: var(--text-secondary);
+-    font-size: 0.85rem;
++    font: var(--text-small);
+ }
+ 
+ .progress-bar {
+-    height: 10px;
+-    border-radius: 999px;
++    height: 8px;
++    border-radius: var(--radius-pill);
+     background: var(--panel-bg);
+     overflow: hidden;
+ }
+@@ -597,7 +859,7 @@ button {
+ .progress-fill {
+     height: 100%;
+     border-radius: inherit;
+-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
++    background: var(--accent-strong);
+ }
+ 
+ .insight-list {
+@@ -606,20 +868,24 @@ button {
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+-    gap: 12px;
++    gap: var(--space-2);
+ }
+ 
+ .insight-list li {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+-    gap: 12px;
+-    padding: 10px 12px;
+-    border-radius: 14px;
++    gap: var(--space-3);
++    padding: var(--space-2) var(--space-3);
++    border-radius: var(--radius-md);
+     background: var(--panel-bg);
+     color: var(--text-primary);
+ }
+ 
++/* =========================================================================
++   Responsive
++   ========================================================================= */
++
+ @media (max-width: 520px) {
+     .goal-row,
+     .stats-grid,
+@@ -630,9 +896,16 @@ button {
+     .page-header {
+         align-items: flex-start;
+         flex-direction: column;
++        gap: var(--space-1);
+     }
+ 
+-    .task-form {
+-        flex-wrap: wrap;
++    .page-layout {
++        padding: var(--space-4) var(--space-4) calc(120px + env(safe-area-inset-bottom));
++    }
++}
++
++@media (min-width: 900px) {
++    .page-layout {
++        padding: var(--space-6) var(--space-6) calc(120px + env(safe-area-inset-bottom));
+     }
+ }
+diff --git a/src/comps/bottomnav.jsx b/src/comps/bottomnav.jsx
+index f0e4d04..6332064 100644
+--- a/src/comps/bottomnav.jsx
++++ b/src/comps/bottomnav.jsx
+@@ -5,8 +5,12 @@ import BarChartIcon from "@mui/icons-material/BarChart";
+ 
+ export default function BottomNav() {
+     return (
+-        <nav className="bottomnav">
+-            <NavLink to="/" className={({ isActive }) => (isActive ? "nav active" : "nav")}>
++        <nav className="bottomnav" aria-label="Primary">
++            <NavLink
++                to="/"
++                end
++                className={({ isActive }) => (isActive ? "nav active" : "nav")}
++            >
+                 <HomeIcon fontSize="small" />
+                 <span>Home</span>
+             </NavLink>
+diff --git a/src/comps/habitcard.jsx b/src/comps/habitcard.jsx
+index 7a8c57c..92bb188 100644
+--- a/src/comps/habitcard.jsx
++++ b/src/comps/habitcard.jsx
+@@ -1,20 +1,30 @@
+ import { useState } from "react";
+-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+-import CancelIcon from "@mui/icons-material/Cancel";
+-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
++import CheckIcon from "@mui/icons-material/Check";
++import CloseIcon from "@mui/icons-material/Close";
++import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
++import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
++import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+ import useHabitStore from "../utils/habitlist";
+ 
+-export default function HabitCard({ id }) {
++const initials = title =>
++    (title || "?")
++        .trim()
++        .slice(0, 2)
++        .toUpperCase();
++
++export default function HabitCard({ id, onEdit }) {
+     const [expanded, setExpanded] = useState(false);
+-    const { getHabitById, updateStatus, removeHabit } = useHabitStore();
++    const { getHabitById, updateStatus, removeHabit, getStreaks } = useHabitStore();
+     const habit = getHabitById(id);
+ 
+     if (!habit) return null;
+ 
++    const { currentStreak, bestStreak } = getStreaks(id);
++
+     const goalLabel =
+         habit.goalType === "count"
+-            ? `Target ${habit.goalValue} times`
++            ? `Target ${habit.goalValue}\u00d7`
+             : habit.goalType === "time"
+                 ? `Target ${habit.goalValue}`
+                 : "Daily routine";
+@@ -23,28 +33,39 @@ export default function HabitCard({ id }) {
+         habit.status === true ? "done" : habit.status === false ? "missed" : "pending";
+ 
+     return (
+-        <article className="habit-card">
++        <article className={`habit-card ${statusClass === "done" ? "is-done" : ""}`}>
+             <div className="habit-card-inner">
+                 <div className="habit-card-top">
++                    <div className="habit-icon" aria-hidden="true">
++                        {initials(habit.habitTitle)}
++                    </div>
++
+                     <div className="habit-card-main">
+                         <h3 className="habit-card-title">{habit.habitTitle}</h3>
+                         <div className="habit-card-meta">
+                             <span className="goal-pill">{goalLabel}</span>
++                            {currentStreak > 0 && (
++                                <span className="streak-pill">
++                                    <LocalFireDepartmentIcon style={{ fontSize: 14 }} />
++                                    {currentStreak}d
++                                </span>
++                            )}
+                             <span className={`status-pill ${statusClass}`}>
+                                 {habit.status === true
+                                     ? "Done"
+                                     : habit.status === false
+                                         ? "Missed"
+-                                        : "In progress"}
++                                        : "Pending"}
+                             </span>
+                         </div>
+                     </div>
+ 
+                     <button
+                         type="button"
+-                        className="small-icon-btn"
++                        className="small-icon-btn expand-btn"
+                         onClick={() => setExpanded(!expanded)}
+-                        aria-label="Toggle habit details"
++                        aria-label={expanded ? "Hide habit details" : "Show habit details"}
++                        aria-expanded={expanded}
+                     >
+                         <ExpandMoreIcon
+                             style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+@@ -56,29 +77,42 @@ export default function HabitCard({ id }) {
+                     <div className="habit-button-row">
+                         <button
+                             type="button"
+-                            className="small-icon-btn success"
++                            className={`small-icon-btn success ${habit.status === true ? "is-active" : ""}`}
+                             onClick={() => updateStatus(id, true)}
+-                            aria-label="Mark habit done"
++                            aria-label={habit.status === true ? "Undo completion" : "Mark habit done"}
++                            aria-pressed={habit.status === true}
+                         >
+-                            <CheckCircleIcon fontSize="small" />
++                            <CheckIcon fontSize="small" />
+                         </button>
+                         <button
+                             type="button"
+-                            className="small-icon-btn danger"
++                            className={`small-icon-btn danger ${habit.status === false ? "is-active" : ""}`}
+                             onClick={() => updateStatus(id, false)}
+-                            aria-label="Mark habit missed"
++                            aria-label={habit.status === false ? "Undo missed mark" : "Mark habit missed"}
++                            aria-pressed={habit.status === false}
+                         >
+-                            <CancelIcon fontSize="small" />
++                            <CloseIcon fontSize="small" />
+                         </button>
+                     </div>
+ 
+-                    <button
+-                        type="button"
+-                        className="ghost-btn"
+-                        onClick={() => removeHabit(id)}
+-                    >
+-                        <DeleteOutlineIcon fontSize="small" />
+-                    </button>
++                    <div className="habit-button-row">
++                        <button
++                            type="button"
++                            className="ghost-btn icon-only"
++                            onClick={() => onEdit?.(habit)}
++                            aria-label="Edit habit"
++                        >
++                            <EditOutlinedIcon fontSize="small" />
++                        </button>
++                        <button
++                            type="button"
++                            className="ghost-btn icon-only danger-text"
++                            onClick={() => removeHabit(id)}
++                            aria-label="Delete habit"
++                        >
++                            <DeleteOutlineIcon fontSize="small" />
++                        </button>
++                    </div>
+                 </div>
+             </div>
+ 
+@@ -88,18 +122,12 @@ export default function HabitCard({ id }) {
+ 
+                     <div className="detail-grid">
+                         <div className="detail-box">
+-                            <span className="label">Goal</span>
+-                            <strong>{goalLabel}</strong>
++                            <span className="label">Current streak</span>
++                            <strong>{currentStreak} {currentStreak === 1 ? "day" : "days"}</strong>
+                         </div>
+                         <div className="detail-box">
+-                            <span className="label">Status</span>
+-                            <strong>
+-                                {habit.status === true
+-                                    ? "Completed"
+-                                    : habit.status === false
+-                                        ? "Missed"
+-                                        : "Pending"}
+-                            </strong>
++                            <span className="label">Best streak</span>
++                            <strong>{bestStreak} {bestStreak === 1 ? "day" : "days"}</strong>
+                         </div>
+                     </div>
+                 </div>
+diff --git a/src/comps/topnav.jsx b/src/comps/topnav.jsx
+index 860021e..d066fa7 100644
+--- a/src/comps/topnav.jsx
++++ b/src/comps/topnav.jsx
+@@ -3,6 +3,13 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
+ import useTheme from "../utils/theme";
+ import IconButton from "@mui/material/IconButton";
+ 
++const getGreeting = () => {
++    const hour = new Date().getHours();
++    if (hour < 12) return "Good morning";
++    if (hour < 18) return "Good afternoon";
++    return "Good evening";
++};
++
+ export default function TopNavBar() {
+     const { theme, toggleTheme } = useTheme();
+ 
+@@ -11,7 +18,7 @@ export default function TopNavBar() {
+             <div className="brand">
+                 <div className="brand-mark">H</div>
+                 <div className="brand-copy">
+-                    <span className="brand-subtitle">Personal growth</span>
++                    <span className="brand-subtitle">{getGreeting()}</span>
+                     <span className="title-text">Habitat</span>
+                 </div>
+             </div>
+@@ -21,7 +28,7 @@ export default function TopNavBar() {
+                 onClick={toggleTheme}
+                 aria-label="Toggle theme"
+             >
+-                {theme === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
++                {theme === "dark" ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
+             </IconButton>
+         </header>
+     );
+diff --git a/src/pages/habits.jsx b/src/pages/habits.jsx
+index bf03f78..f91397f 100644
+--- a/src/pages/habits.jsx
++++ b/src/pages/habits.jsx
+@@ -1,7 +1,6 @@
+-import React, { useState } from "react";
++import { useMemo, useState } from "react";
+ import AddIcon from "@mui/icons-material/Add";
+ import {
+-    Button,
+     Dialog,
+     DialogContent,
+     DialogActions,
+@@ -12,10 +11,38 @@ import CloseIcon from "@mui/icons-material/Close";
+ import useHabitStore from "../utils/habitlist";
+ import HabitCard from "../comps/habitcard";
+ 
++const emptyDraft = {
++    habitTitle: "",
++    habitDescription: "",
++    goalType: "routine",
++    goalValue: "1"
++};
++
+ export default function Habits() {
+     const [open, setOpen] = useState(false);
++    const [editingHabit, setEditingHabit] = useState(null);
+     const { habits } = useHabitStore();
+ 
++    const { completed, total, percent } = useMemo(() => {
++        const totalCount = habits.length;
++        const completedCount = habits.filter(habit => habit.status === true).length;
++        return {
++            completed: completedCount,
++            total: totalCount,
++            percent: totalCount ? Math.round((completedCount / totalCount) * 100) : 0
++        };
++    }, [habits]);
++
++    const openCreate = () => {
++        setEditingHabit(null);
++        setOpen(true);
++    };
++
++    const openEdit = habit => {
++        setEditingHabit(habit);
++        setOpen(true);
++    };
++
+     return (
+         <div className="habits-page">
+             <header className="page-header">
+@@ -23,22 +50,38 @@ export default function Habits() {
+                     <h1>Habits</h1>
+                     <span>Daily focus</span>
+                 </div>
+-                <Button
+-                    className="primary-btn"
+-                    startIcon={<AddIcon />}
+-                    onClick={() => setOpen(true)}
+-                >
++                <button type="button" className="primary-btn" onClick={openCreate}>
++                    <AddIcon fontSize="small" />
+                     Add Habit
+-                </Button>
++                </button>
+             </header>
+ 
++            {total > 0 && (
++                <div className="progress-summary">
++                    <div className="progress-ring" style={{ "--ring-percent": percent }}>
++                        <span>{percent}%</span>
++                    </div>
++                    <div className="progress-summary-copy">
++                        <span className="progress-summary-title">Today's progress</span>
++                        <strong>{completed} / {total} habits completed</strong>
++                    </div>
++                </div>
++            )}
++
+             <div className="habits-list">
+                 {habits.length === 0 ? (
+                     <div className="empty-state">
+-                        No habits yet. Create one to begin building momentum.
++                        <strong>Your routine starts here.</strong>
++                        <p>Create your first habit and give your day some structure.</p>
++                        <button type="button" className="primary-btn" onClick={openCreate}>
++                            <AddIcon fontSize="small" />
++                            Create your first habit
++                        </button>
+                     </div>
+                 ) : (
+-                    habits.map(habit => <HabitCard key={habit.id} id={habit.id} />)
++                    habits.map(habit => (
++                        <HabitCard key={habit.id} id={habit.id} onEdit={openEdit} />
++                    ))
+                 )}
+             </div>
+ 
+@@ -51,13 +94,14 @@ export default function Habits() {
+             >
+                 <DialogContent>
+                     <div className="dialog-header">
+-                        <h3>Add Habit</h3>
++                        <h3>{editingHabit ? "Edit Habit" : "Add Habit"}</h3>
+                         <IconButton onClick={() => setOpen(false)} size="small">
+                             <CloseIcon />
+                         </IconButton>
+                     </div>
+ 
+-                    <AddHabitForm
++                    <HabitForm
++                        habit={editingHabit}
+                         onClose={() => setOpen(false)}
+                         onSubmit={() => setOpen(false)}
+                     />
+@@ -67,39 +111,44 @@ export default function Habits() {
+     );
+ }
+ 
+-function AddHabitForm({ onClose, onSubmit }) {
+-    const [habitTitle, setHabitTitle] = useState("");
+-    const [description, setDescription] = useState("");
+-    const [goalType, setGoalType] = useState("routine");
+-    const [goalValue, setGoalValue] = useState("1");
+-    const { addHabit } = useHabitStore();
+-
+-    const handleAdd = () => {
+-        const trimmedTitle = habitTitle.trim();
++function HabitForm({ habit, onClose, onSubmit }) {
++    const isEditing = Boolean(habit);
++    const [draft, setDraft] = useState(() =>
++        isEditing
++            ? {
++                habitTitle: habit.habitTitle,
++                habitDescription: habit.habitDescription || "",
++                goalType: habit.goalType || "routine",
++                goalValue: habit.goalValue != null ? String(habit.goalValue) : "1"
++            }
++            : emptyDraft
++    );
++    const { addHabit, editHabit } = useHabitStore();
+ 
+-        if (!trimmedTitle) {
+-            return;
+-        }
++    const handleSave = () => {
++        const trimmedTitle = draft.habitTitle.trim();
++        if (!trimmedTitle) return;
+ 
+         const normalizedGoalValue =
+-            goalType === "count"
+-                ? Number(goalValue) || 1
+-                : goalType === "time"
+-                    ? goalValue
++            draft.goalType === "count"
++                ? Number(draft.goalValue) || 1
++                : draft.goalType === "time"
++                    ? draft.goalValue
+                     : null;
+ 
+-        addHabit({
++        const payload = {
+             habitTitle: trimmedTitle,
+-            habitDescription: description.trim(),
+-            goalType,
+-            goalValue: normalizedGoalValue,
+-            status: null
+-        });
+-
+-        setHabitTitle("");
+-        setDescription("");
+-        setGoalType("routine");
+-        setGoalValue("1");
++            habitDescription: draft.habitDescription.trim(),
++            goalType: draft.goalType,
++            goalValue: normalizedGoalValue
++        };
++
++        if (isEditing) {
++            editHabit(habit.id, payload);
++        } else {
++            addHabit({ ...payload, status: null });
++        }
++
+         onSubmit();
+         onClose();
+     };
+@@ -108,16 +157,16 @@ function AddHabitForm({ onClose, onSubmit }) {
+         <div className="field-stack">
+             <TextField
+                 label="Habit title"
+-                value={habitTitle}
+-                onChange={event => setHabitTitle(event.target.value)}
++                value={draft.habitTitle}
++                onChange={event => setDraft({ ...draft, habitTitle: event.target.value })}
+                 fullWidth
+                 variant="outlined"
+             />
+ 
+             <TextField
+                 label="Description"
+-                value={description}
+-                onChange={event => setDescription(event.target.value)}
++                value={draft.habitDescription}
++                onChange={event => setDraft({ ...draft, habitDescription: event.target.value })}
+                 fullWidth
+                 multiline
+                 minRows={3}
+@@ -133,31 +182,31 @@ function AddHabitForm({ onClose, onSubmit }) {
+                     <button
+                         key={option.key}
+                         type="button"
+-                        className={`goal-chip ${goalType === option.key ? "active" : ""}`}
+-                        onClick={() => setGoalType(option.key)}
++                        className={`goal-chip ${draft.goalType === option.key ? "active" : ""}`}
++                        onClick={() => setDraft({ ...draft, goalType: option.key })}
+                     >
+                         {option.label}
+                     </button>
+                 ))}
+             </div>
+ 
+-            {goalType === "count" && (
++            {draft.goalType === "count" && (
+                 <TextField
+                     label="Target count"
+                     type="number"
+-                    min="1"
+-                    value={goalValue}
+-                    onChange={event => setGoalValue(event.target.value)}
++                    inputProps={{ min: 1 }}
++                    value={draft.goalValue}
++                    onChange={event => setDraft({ ...draft, goalValue: event.target.value })}
+                     fullWidth
+                     variant="outlined"
+                 />
+             )}
+ 
+-            {goalType === "time" && (
++            {draft.goalType === "time" && (
+                 <TextField
+                     label="Target duration"
+-                    value={goalValue}
+-                    onChange={event => setGoalValue(event.target.value)}
++                    value={draft.goalValue}
++                    onChange={event => setDraft({ ...draft, goalValue: event.target.value })}
+                     placeholder="e.g. 20 mins"
+                     fullWidth
+                     variant="outlined"
+@@ -168,8 +217,8 @@ function AddHabitForm({ onClose, onSubmit }) {
+                 <button type="button" className="ghost-btn" onClick={onClose}>
+                     Cancel
+                 </button>
+-                <button type="button" className="primary-btn" onClick={handleAdd}>
+-                    Save Habit
++                <button type="button" className="primary-btn" onClick={handleSave}>
++                    {isEditing ? "Save Changes" : "Save Habit"}
+                 </button>
+             </DialogActions>
+         </div>
+diff --git a/src/pages/stats.jsx b/src/pages/stats.jsx
+index 96f7367..db9a6e3 100644
+--- a/src/pages/stats.jsx
++++ b/src/pages/stats.jsx
+@@ -1,4 +1,5 @@
+-import useHabitStore from "../utils/habitlist";
++import { useMemo } from "react";
++import useHabitStore, { computeStreaks } from "../utils/habitlist";
+ 
+ export default function Stats() {
+     const { habits, tasks } = useHabitStore();
+@@ -9,6 +10,19 @@ export default function Stats() {
+     const completedTasks = tasks.filter(task => task.done).length;
+     const taskProgress = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
+ 
++    const { longestCurrentStreak, longestBestStreak } = useMemo(() => {
++        if (habits.length === 0) {
++            return { longestCurrentStreak: 0, longestBestStreak: 0 };
++        }
++        const streaks = habits.map(computeStreaks);
++        return {
++            longestCurrentStreak: Math.max(...streaks.map(s => s.currentStreak)),
++            longestBestStreak: Math.max(...streaks.map(s => s.bestStreak))
++        };
++    }, [habits]);
++
++    const hasActivity = habits.length > 0 || tasks.length > 0;
++
+     return (
+         <div className="stats-page">
+             <header className="page-header">
+@@ -18,61 +32,80 @@ export default function Stats() {
+                 </div>
+             </header>
+ 
+-            <div className="stats-grid">
+-                <div className="stat-card">
+-                    <span className="label">Habits</span>
+-                    <span className="value">{habits.length}</span>
+-                    <span className="detail">{completedHabits} completed</span>
+-                </div>
+-                <div className="stat-card">
+-                    <span className="label">Tasks</span>
+-                    <span className="value">{tasks.length}</span>
+-                    <span className="detail">{completedTasks} finished</span>
++            {!hasActivity ? (
++                <div className="empty-state">
++                    <strong>Your progress story hasn't started yet.</strong>
++                    <p>Add a habit or a task to see it reflected here.</p>
+                 </div>
+-            </div>
+-
+-            <div className="panel">
+-                <h3>Progress</h3>
+-                <div className="progress-list">
+-                    <div className="progress-item">
+-                        <div className="progress-row">
+-                            <span>Habit completion</span>
+-                            <strong>{habitProgress}%</strong>
++            ) : (
++                <>
++                    <div className="stats-grid">
++                        <div className="stat-card">
++                            <span className="label">Habits</span>
++                            <span className="value">{habits.length}</span>
++                            <span className="detail">{completedHabits} completed today</span>
++                        </div>
++                        <div className="stat-card">
++                            <span className="label">Tasks</span>
++                            <span className="value">{tasks.length}</span>
++                            <span className="detail">{completedTasks} finished</span>
+                         </div>
+-                        <div className="progress-bar">
+-                            <div className="progress-fill" style={{ width: `${habitProgress}%` }} />
++                        <div className="stat-card">
++                            <span className="label">Best streak</span>
++                            <span className="value">{longestCurrentStreak}</span>
++                            <span className="detail">longest active run, days</span>
++                        </div>
++                        <div className="stat-card">
++                            <span className="label">All-time best</span>
++                            <span className="value">{longestBestStreak}</span>
++                            <span className="detail">days, any habit</span>
+                         </div>
+                     </div>
+ 
+-                    <div className="progress-item">
+-                        <div className="progress-row">
+-                            <span>Task completion</span>
+-                            <strong>{taskProgress}%</strong>
+-                        </div>
+-                        <div className="progress-bar">
+-                            <div className="progress-fill" style={{ width: `${taskProgress}%` }} />
++                    <div className="panel">
++                        <h3>Progress</h3>
++                        <div className="progress-list">
++                            <div className="progress-item">
++                                <div className="progress-row">
++                                    <span>Habit completion</span>
++                                    <strong>{habitProgress}%</strong>
++                                </div>
++                                <div className="progress-bar">
++                                    <div className="progress-fill" style={{ width: `${habitProgress}%` }} />
++                                </div>
++                            </div>
++
++                            <div className="progress-item">
++                                <div className="progress-row">
++                                    <span>Task completion</span>
++                                    <strong>{taskProgress}%</strong>
++                                </div>
++                                <div className="progress-bar">
++                                    <div className="progress-fill" style={{ width: `${taskProgress}%` }} />
++                                </div>
++                            </div>
+                         </div>
+                     </div>
+-                </div>
+-            </div>
+ 
+-            <div className="panel">
+-                <h3>Insights</h3>
+-                <ul className="insight-list">
+-                    <li>
+-                        <span>Pending habits</span>
+-                        <strong>{pendingHabits}</strong>
+-                    </li>
+-                    <li>
+-                        <span>Finished tasks</span>
+-                        <strong>{completedTasks}</strong>
+-                    </li>
+-                    <li>
+-                        <span>Overall rhythm</span>
+-                        <strong>{Math.max(0, Math.min(100, habitProgress + taskProgress - 20))}%</strong>
+-                    </li>
+-                </ul>
+-            </div>
++                    <div className="panel">
++                        <h3>Insights</h3>
++                        <ul className="insight-list">
++                            <li>
++                                <span>Pending habits</span>
++                                <strong>{pendingHabits}</strong>
++                            </li>
++                            <li>
++                                <span>Finished tasks</span>
++                                <strong>{completedTasks}</strong>
++                            </li>
++                            <li>
++                                <span>Overall rhythm</span>
++                                <strong>{Math.max(0, Math.min(100, habitProgress + taskProgress - 20))}%</strong>
++                            </li>
++                        </ul>
++                    </div>
++                </>
++            )}
+         </div>
+     );
+ }
+diff --git a/src/pages/tasks.jsx b/src/pages/tasks.jsx
+index e4b154f..5fa1963 100644
+--- a/src/pages/tasks.jsx
++++ b/src/pages/tasks.jsx
+@@ -1,5 +1,6 @@
+ import { useState } from "react";
+ import AddIcon from "@mui/icons-material/Add";
++import CheckIcon from "@mui/icons-material/Check";
+ import useHabitStore from "../utils/habitlist";
+ 
+ export default function Tasks() {
+@@ -14,12 +15,14 @@ export default function Tasks() {
+         setTaskTitle("");
+     };
+ 
++    const doneCount = tasks.filter(task => task.done).length;
++
+     return (
+         <div className="tasks-page">
+             <header className="page-header">
+                 <div>
+-                    <h2>Today</h2>
+-                    <span>{tasks.filter(task => task.done).length}/{tasks.length} complete</span>
++                    <h1>Today</h1>
++                    <span>{tasks.length ? `${doneCount}/${tasks.length} complete` : "Nothing scheduled yet"}</span>
+                 </div>
+             </header>
+ 
+@@ -28,37 +31,43 @@ export default function Tasks() {
+                     type="text"
+                     value={taskTitle}
+                     onChange={event => setTaskTitle(event.target.value)}
+-                    placeholder="Add daily task"
++                    placeholder="Add a task for today"
++                    aria-label="Add a task for today"
+                     onKeyDown={event => {
+                         if (event.key === "Enter") {
+                             handleAddTask();
+                         }
+                     }}
+                 />
+-                <button type="button" className="primary-btn" onClick={handleAddTask}>
+-                    <AddIcon sx={{ fontSize: 18 }} />
++                <button type="button" className="primary-btn icon-only" onClick={handleAddTask} aria-label="Add task">
++                    <AddIcon fontSize="small" />
+                 </button>
+             </div>
+ 
+             <div className="task-list">
+                 {tasks.length === 0 ? (
+-                    <div className="empty-state">Your task list is clear.</div>
++                    <div className="empty-state">
++                        <strong>Your task list is clear.</strong>
++                        <p>Add something small to keep today moving.</p>
++                    </div>
+                 ) : (
+                     tasks.map(task => (
+-                        <div className="task-card" key={task.id}>
++                        <div className={`task-card ${task.done ? "is-done" : ""}`} key={task.id}>
++                            <button
++                                type="button"
++                                className={`task-check ${task.done ? "checked" : ""}`}
++                                onClick={() => toggleTask(task.id)}
++                                aria-pressed={task.done}
++                                aria-label={task.done ? "Mark task not done" : "Mark task done"}
++                            >
++                                {task.done && <CheckIcon fontSize="small" />}
++                            </button>
+                             <div className="task-text">
+                                 <strong style={{ textDecoration: task.done ? "line-through" : "none" }}>
+                                     {task.title}
+                                 </strong>
+                                 <small>{task.done ? "Completed" : "Pending"}</small>
+                             </div>
+-                            <button
+-                                type="button"
+-                                className={`task-toggle-btn ${task.done ? "done" : ""}`}
+-                                onClick={() => toggleTask(task.id)}
+-                            >
+-                                {task.done ? "Done" : "Mark done"}
+-                            </button>
+                         </div>
+                     ))
+                 )}
+diff --git a/src/utils/habitlist.jsx b/src/utils/habitlist.jsx
+index 50861e3..8cfc2ae 100644
+--- a/src/utils/habitlist.jsx
++++ b/src/utils/habitlist.jsx
+@@ -22,18 +22,132 @@ const defaultTasks = [
+     { id: "task-3", title: "Stretch for 10 minutes", done: false }
+ ];
+ 
++// ---- date helpers -------------------------------------------------------
++
++const todayKey = () => new Date().toISOString().slice(0, 10); // YYYY-MM-DD
++
++// All date-key arithmetic is done in UTC so it stays internally consistent
++// regardless of the browser's local timezone offset.
++const daysBetween = (a, b) => {
++    const msPerDay = 24 * 60 * 60 * 1000;
++    return Math.round((new Date(`${b}T00:00:00Z`) - new Date(`${a}T00:00:00Z`)) / msPerDay);
++};
++
++const shiftDateKey = (dateKey, deltaDays) => {
++    const date = new Date(`${dateKey}T00:00:00Z`);
++    date.setUTCDate(date.getUTCDate() + deltaDays);
++    return date.toISOString().slice(0, 10);
++};
++
++/**
++ * Rolls a habit's "today" status into its history log, then resets status
++ * to null so a new day starts fresh. Only runs once per calendar day per
++ * device (tracked via habitat_last_active_date). Safe no-op for habits
++ * created before this field existed (history defaults to []).
++ */
++const rollHabitForward = (habit, fromDate) => {
++    const history = Array.isArray(habit.history) ? [...habit.history] : [];
++
++    if (habit.status !== null && habit.status !== undefined) {
++        const alreadyLogged = history.some(entry => entry.date === fromDate);
++        if (!alreadyLogged) {
++            history.push({ date: fromDate, status: habit.status });
++        }
++    }
++
++    return { ...habit, status: null, history };
++};
++
++const applyRollover = habits => {
++    const lastActive = localStorage.getItem("habitat_last_active_date");
++    const today = todayKey();
++
++    if (lastActive === today) {
++        return habits;
++    }
++
++    let rolled = habits;
++    if (lastActive) {
++        // Roll the previous active day's status into history so it isn't
++        // lost when a fresh day starts.
++        rolled = habits.map(habit => rollHabitForward(habit, lastActive));
++    }
++
++    localStorage.setItem("habitat_last_active_date", today);
++    writeStorage("habitat_habits", rolled);
++    return rolled;
++};
++
++/**
++ * Current streak = consecutive completed days counting back from the most
++ * recent recorded day (today if already marked done, otherwise yesterday).
++ * Best streak = the longest run of consecutive completed days in history.
++ */
++const computeStreaks = habit => {
++    const history = Array.isArray(habit.history) ? habit.history : [];
++    const entries = [...history];
++
++    if (habit.status === true) {
++        entries.push({ date: todayKey(), status: true });
++    }
++
++    const doneDates = entries
++        .filter(entry => entry.status === true)
++        .map(entry => entry.date)
++        .sort();
++
++    if (doneDates.length === 0) {
++        return { currentStreak: 0, bestStreak: 0 };
++    }
++
++    let bestStreak = 1;
++    let run = 1;
++    for (let i = 1; i < doneDates.length; i += 1) {
++        const gap = daysBetween(doneDates[i - 1], doneDates[i]);
++        run = gap === 1 ? run + 1 : 1;
++        bestStreak = Math.max(bestStreak, run);
++    }
++
++    const doneSet = new Set(doneDates);
++    let currentStreak = 0;
++    let cursorKey = doneDates[doneDates.length - 1];
++    const mostRecentGap = daysBetween(cursorKey, todayKey());
++
++    if (mostRecentGap <= 1) {
++        while (doneSet.has(cursorKey)) {
++            currentStreak += 1;
++            cursorKey = shiftDateKey(cursorKey, -1);
++        }
++    }
++
++    return { currentStreak, bestStreak };
++};
++
+ const useHabitStore = create((set, get) => ({
+-    habits: readStorage("habitat_habits", []),
++    habits: applyRollover(readStorage("habitat_habits", [])),
+     tasks: readStorage("habitat_tasks", defaultTasks),
+ 
+     addHabit: habitData =>
+         set(state => {
+-            const updated = [{ id: generateId(), ...habitData }, ...state.habits];
++            const updated = [
++                { id: generateId(), history: [], ...habitData },
++                ...state.habits
++            ];
+             writeStorage("habitat_habits", updated);
+             toast("Habit added");
+             return { habits: updated };
+         }),
+ 
++    editHabit: (id, habitData) =>
++        set(state => {
++            const updated = state.habits.map(habit =>
++                habit.id === id ? { ...habit, ...habitData } : habit
++            );
++            writeStorage("habitat_habits", updated);
++            toast("Habit updated");
++            return { habits: updated };
++        }),
++
+     removeHabit: id =>
+         set(state => {
+             const updated = state.habits.filter(habit => habit.id !== id);
+@@ -45,7 +159,9 @@ const useHabitStore = create((set, get) => ({
+     updateStatus: (id, status) =>
+         set(state => {
+             const updated = state.habits.map(habit =>
+-                habit.id === id ? { ...habit, status } : habit
++                habit.id === id
++                    ? { ...habit, status: habit.status === status ? null : status }
++                    : habit
+             );
+             writeStorage("habitat_habits", updated);
+             return { habits: updated };
+@@ -56,6 +172,12 @@ const useHabitStore = create((set, get) => ({
+         return habits.find(habit => habit.id === id) || null;
+     },
+ 
++    getStreaks: id => {
++        const habit = get().getHabitById(id);
++        if (!habit) return { currentStreak: 0, bestStreak: 0 };
++        return computeStreaks(habit);
++    },
++
+     addTask: taskData =>
+         set(state => {
+             const updated = [{ id: generateId(), ...taskData }, ...state.tasks];
+@@ -74,3 +196,4 @@ const useHabitStore = create((set, get) => ({
+ }));
+ 
+ export default useHabitStore;
++export { computeStreaks };

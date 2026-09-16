@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import {
-    Button,
     Dialog,
     DialogContent,
     DialogActions,
@@ -12,9 +11,37 @@ import CloseIcon from "@mui/icons-material/Close";
 import useHabitStore from "../utils/habitlist";
 import HabitCard from "../comps/habitcard";
 
+const emptyDraft = {
+    habitTitle: "",
+    habitDescription: "",
+    goalType: "routine",
+    goalValue: "1"
+};
+
 export default function Habits() {
     const [open, setOpen] = useState(false);
+    const [editingHabit, setEditingHabit] = useState(null);
     const { habits } = useHabitStore();
+
+    const { completed, total, percent } = useMemo(() => {
+        const totalCount = habits.length;
+        const completedCount = habits.filter(habit => habit.status === true).length;
+        return {
+            completed: completedCount,
+            total: totalCount,
+            percent: totalCount ? Math.round((completedCount / totalCount) * 100) : 0
+        };
+    }, [habits]);
+
+    const openCreate = () => {
+        setEditingHabit(null);
+        setOpen(true);
+    };
+
+    const openEdit = habit => {
+        setEditingHabit(habit);
+        setOpen(true);
+    };
 
     return (
         <div className="habits-page">
@@ -23,22 +50,38 @@ export default function Habits() {
                     <h1>Habits</h1>
                     <span>Daily focus</span>
                 </div>
-                <Button
-                    className="primary-btn"
-                    startIcon={<AddIcon />}
-                    onClick={() => setOpen(true)}
-                >
+                <button type="button" className="primary-btn" onClick={openCreate}>
+                    <AddIcon fontSize="small" />
                     Add Habit
-                </Button>
+                </button>
             </header>
+
+            {total > 0 && (
+                <div className="progress-summary">
+                    <div className="progress-ring" style={{ "--ring-percent": percent }}>
+                        <span>{percent}%</span>
+                    </div>
+                    <div className="progress-summary-copy">
+                        <span className="progress-summary-title">Today's progress</span>
+                        <strong>{completed} / {total} habits completed</strong>
+                    </div>
+                </div>
+            )}
 
             <div className="habits-list">
                 {habits.length === 0 ? (
                     <div className="empty-state">
-                        No habits yet. Create one to begin building momentum.
+                        <strong>Your routine starts here.</strong>
+                        <p>Create your first habit and give your day some structure.</p>
+                        <button type="button" className="primary-btn" onClick={openCreate}>
+                            <AddIcon fontSize="small" />
+                            Create your first habit
+                        </button>
                     </div>
                 ) : (
-                    habits.map(habit => <HabitCard key={habit.id} id={habit.id} />)
+                    habits.map(habit => (
+                        <HabitCard key={habit.id} id={habit.id} onEdit={openEdit} />
+                    ))
                 )}
             </div>
 
@@ -51,13 +94,14 @@ export default function Habits() {
             >
                 <DialogContent>
                     <div className="dialog-header">
-                        <h3>Add Habit</h3>
+                        <h3>{editingHabit ? "Edit Habit" : "Add Habit"}</h3>
                         <IconButton onClick={() => setOpen(false)} size="small">
                             <CloseIcon />
                         </IconButton>
                     </div>
 
-                    <AddHabitForm
+                    <HabitForm
+                        habit={editingHabit}
                         onClose={() => setOpen(false)}
                         onSubmit={() => setOpen(false)}
                     />
@@ -67,39 +111,44 @@ export default function Habits() {
     );
 }
 
-function AddHabitForm({ onClose, onSubmit }) {
-    const [habitTitle, setHabitTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [goalType, setGoalType] = useState("routine");
-    const [goalValue, setGoalValue] = useState("1");
-    const { addHabit } = useHabitStore();
+function HabitForm({ habit, onClose, onSubmit }) {
+    const isEditing = Boolean(habit);
+    const [draft, setDraft] = useState(() =>
+        isEditing
+            ? {
+                habitTitle: habit.habitTitle,
+                habitDescription: habit.habitDescription || "",
+                goalType: habit.goalType || "routine",
+                goalValue: habit.goalValue != null ? String(habit.goalValue) : "1"
+            }
+            : emptyDraft
+    );
+    const { addHabit, editHabit } = useHabitStore();
 
-    const handleAdd = () => {
-        const trimmedTitle = habitTitle.trim();
-
-        if (!trimmedTitle) {
-            return;
-        }
+    const handleSave = () => {
+        const trimmedTitle = draft.habitTitle.trim();
+        if (!trimmedTitle) return;
 
         const normalizedGoalValue =
-            goalType === "count"
-                ? Number(goalValue) || 1
-                : goalType === "time"
-                    ? goalValue
+            draft.goalType === "count"
+                ? Number(draft.goalValue) || 1
+                : draft.goalType === "time"
+                    ? draft.goalValue
                     : null;
 
-        addHabit({
+        const payload = {
             habitTitle: trimmedTitle,
-            habitDescription: description.trim(),
-            goalType,
-            goalValue: normalizedGoalValue,
-            status: null
-        });
+            habitDescription: draft.habitDescription.trim(),
+            goalType: draft.goalType,
+            goalValue: normalizedGoalValue
+        };
 
-        setHabitTitle("");
-        setDescription("");
-        setGoalType("routine");
-        setGoalValue("1");
+        if (isEditing) {
+            editHabit(habit.id, payload);
+        } else {
+            addHabit({ ...payload, status: null });
+        }
+
         onSubmit();
         onClose();
     };
@@ -108,19 +157,19 @@ function AddHabitForm({ onClose, onSubmit }) {
         <div className="field-stack">
             <TextField
                 label="Habit title"
-                value={habitTitle}
-                onChange={event => setHabitTitle(event.target.value)}
+                value={draft.habitTitle}
+                onChange={event => setDraft({ ...draft, habitTitle: event.target.value })}
                 fullWidth
                 variant="outlined"
             />
 
             <TextField
                 label="Description"
-                value={description}
-                onChange={event => setDescription(event.target.value)}
+                value={draft.habitDescription}
+                onChange={event => setDraft({ ...draft, habitDescription: event.target.value })}
                 fullWidth
                 multiline
-                minRows={3}
+                minRows={2}
                 variant="outlined"
             />
 
@@ -133,31 +182,31 @@ function AddHabitForm({ onClose, onSubmit }) {
                     <button
                         key={option.key}
                         type="button"
-                        className={`goal-chip ${goalType === option.key ? "active" : ""}`}
-                        onClick={() => setGoalType(option.key)}
+                        className={`goal-chip ${draft.goalType === option.key ? "active" : ""}`}
+                        onClick={() => setDraft({ ...draft, goalType: option.key })}
                     >
                         {option.label}
                     </button>
                 ))}
             </div>
 
-            {goalType === "count" && (
+            {draft.goalType === "count" && (
                 <TextField
                     label="Target count"
                     type="number"
-                    min="1"
-                    value={goalValue}
-                    onChange={event => setGoalValue(event.target.value)}
+                    inputProps={{ min: 1 }}
+                    value={draft.goalValue}
+                    onChange={event => setDraft({ ...draft, goalValue: event.target.value })}
                     fullWidth
                     variant="outlined"
                 />
             )}
 
-            {goalType === "time" && (
+            {draft.goalType === "time" && (
                 <TextField
                     label="Target duration"
-                    value={goalValue}
-                    onChange={event => setGoalValue(event.target.value)}
+                    value={draft.goalValue}
+                    onChange={event => setDraft({ ...draft, goalValue: event.target.value })}
                     placeholder="e.g. 20 mins"
                     fullWidth
                     variant="outlined"
@@ -168,8 +217,8 @@ function AddHabitForm({ onClose, onSubmit }) {
                 <button type="button" className="ghost-btn" onClick={onClose}>
                     Cancel
                 </button>
-                <button type="button" className="primary-btn" onClick={handleAdd}>
-                    Save Habit
+                <button type="button" className="primary-btn" onClick={handleSave}>
+                    {isEditing ? "Save Changes" : "Save Habit"}
                 </button>
             </DialogActions>
         </div>

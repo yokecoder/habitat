@@ -5,8 +5,12 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 
 export default function BottomNav() {
     return (
-        <nav className="bottomnav">
-            <NavLink to="/" className={({ isActive }) => (isActive ? "nav active" : "nav")}>
+        <nav className="bottomnav" aria-label="Primary">
+            <NavLink
+                to="/"
+                end
+                className={({ isActive }) => (isActive ? "nav active" : "nav")}
+            >
                 <HomeIcon fontSize="small" />
                 <span>Home</span>
             </NavLink>

@@ -1,20 +1,30 @@
 import { useState } from "react";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useHabitStore from "../utils/habitlist";
 
-export default function HabitCard({ id }) {
+const initials = title =>
+    (title || "?")
+        .trim()
+        .slice(0, 2)
+        .toUpperCase();
+
+export default function HabitCard({ id, onEdit }) {
     const [expanded, setExpanded] = useState(false);
-    const { getHabitById, updateStatus, removeHabit } = useHabitStore();
+    const { getHabitById, updateStatus, removeHabit, getStreaks } = useHabitStore();
     const habit = getHabitById(id);
 
     if (!habit) return null;
 
+    const { currentStreak, bestStreak } = getStreaks(id);
+
     const goalLabel =
         habit.goalType === "count"
-            ? `Target ${habit.goalValue} times`
+            ? `Target ${habit.goalValue}\u00d7`
             : habit.goalType === "time"
                 ? `Target ${habit.goalValue}`
                 : "Daily routine";
@@ -23,28 +33,39 @@ export default function HabitCard({ id }) {
         habit.status === true ? "done" : habit.status === false ? "missed" : "pending";
 
     return (
-        <article className="habit-card">
+        <article className={`habit-card ${statusClass === "done" ? "is-done" : ""}`}>
             <div className="habit-card-inner">
                 <div className="habit-card-top">
+                    <div className="habit-icon" aria-hidden="true">
+                        {initials(habit.habitTitle)}
+                    </div>
+
                     <div className="habit-card-main">
                         <h3 className="habit-card-title">{habit.habitTitle}</h3>
                         <div className="habit-card-meta">
                             <span className="goal-pill">{goalLabel}</span>
+                            {currentStreak > 0 && (
+                                <span className="streak-pill">
+                                    <LocalFireDepartmentIcon style={{ fontSize: 14 }} />
+                                    {currentStreak}d
+                                </span>
+                            )}
                             <span className={`status-pill ${statusClass}`}>
                                 {habit.status === true
                                     ? "Done"
                                     : habit.status === false
                                         ? "Missed"
-                                        : "In progress"}
+                                        : "Pending"}
                             </span>
                         </div>
                     </div>
 
                     <button
                         type="button"
-                        className="small-icon-btn"
+                        className="small-icon-btn expand-btn"
                         onClick={() => setExpanded(!expanded)}
-                        aria-label="Toggle habit details"
+                        aria-label={expanded ? "Hide habit details" : "Show habit details"}
+                        aria-expanded={expanded}
                     >
                         <ExpandMoreIcon
                             style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -56,29 +77,42 @@ export default function HabitCard({ id }) {
                     <div className="habit-button-row">
                         <button
                             type="button"
-                            className="small-icon-btn success"
+                            className={`small-icon-btn success ${habit.status === true ? "is-active" : ""}`}
                             onClick={() => updateStatus(id, true)}
-                            aria-label="Mark habit done"
+                            aria-label={habit.status === true ? "Undo completion" : "Mark habit done"}
+                            aria-pressed={habit.status === true}
                         >
-                            <CheckCircleIcon fontSize="small" />
+                            <CheckIcon fontSize="small" />
                         </button>
                         <button
                             type="button"
-                            className="small-icon-btn danger"
+                            className={`small-icon-btn danger ${habit.status === false ? "is-active" : ""}`}
                             onClick={() => updateStatus(id, false)}
-                            aria-label="Mark habit missed"
+                            aria-label={habit.status === false ? "Undo missed mark" : "Mark habit missed"}
+                            aria-pressed={habit.status === false}
                         >
-                            <CancelIcon fontSize="small" />
+                            <CloseIcon fontSize="small" />
                         </button>
                     </div>
 
-                    <button
-                        type="button"
-                        className="ghost-btn"
-                        onClick={() => removeHabit(id)}
-                    >
-                        <DeleteOutlineIcon fontSize="small" />
-                    </button>
+                    <div className="habit-button-row">
+                        <button
+                            type="button"
+                            className="ghost-btn icon-only"
+                            onClick={() => onEdit?.(habit)}
+                            aria-label="Edit habit"
+                        >
+                            <EditOutlinedIcon fontSize="small" />
+                        </button>
+                        <button
+                            type="button"
+                            className="ghost-btn icon-only danger-text"
+                            onClick={() => removeHabit(id)}
+                            aria-label="Delete habit"
+                        >
+                            <DeleteOutlineIcon fontSize="small" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -88,18 +122,12 @@ export default function HabitCard({ id }) {
 
                     <div className="detail-grid">
                         <div className="detail-box">
-                            <span className="label">Goal</span>
-                            <strong>{goalLabel}</strong>
+                            <span className="label">Current streak</span>
+                            <strong>{currentStreak} {currentStreak === 1 ? "day" : "days"}</strong>
                         </div>
                         <div className="detail-box">
-                            <span className="label">Status</span>
-                            <strong>
-                                {habit.status === true
-                                    ? "Completed"
-                                    : habit.status === false
-                                        ? "Missed"
-                                        : "Pending"}
-                            </strong>
+                            <span className="label">Best streak</span>
+                            <strong>{bestStreak} {bestStreak === 1 ? "day" : "days"}</strong>
                         </div>
                     </div>
                 </div>

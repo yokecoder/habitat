@@ -9,9 +9,10 @@ export default function TopNavBar() {
     return (
         <header className="topnavbar">
             <div className="brand">
-                <div className="brand-mark">H</div>
+                <div className="brand-mark">
+                    <img src="/assets/habitat-logo.png" alt="Habitat logo" />
+                </div>
                 <div className="brand-copy">
-                    <span className="brand-subtitle">Personal growth</span>
                     <span className="title-text">Habitat</span>
                 </div>
             </div>
@@ -21,7 +22,7 @@ export default function TopNavBar() {
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
             >
-                {theme === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+                {theme === "dark" ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
             </IconButton>
         </header>
     );

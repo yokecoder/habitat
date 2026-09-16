@@ -6,18 +6,20 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#000",
-  "theme_color": "#000",
+  "background_color": "#100e12",
+  "theme_color": "#1b161b",
   "icons": [
     {
-      "src": "/assets/IMG_20251005_140119.jpg",
+      "src": "/assets/habitat-logo.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/IMG_20251005_140119.jpg",
+      "src": "/assets/habitat-logo.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
