@@ -7,6 +7,21 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useHabitStore from "../utils/habitlist";
 
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+const shiftDate = (dateKey, deltaDays) => {
+    const date = new Date(`${dateKey}T00:00:00Z`);
+    date.setUTCDate(date.getUTCDate() + deltaDays);
+    return date.toISOString().slice(0, 10);
+};
+
+const formatDate = dateKey => new Intl.DateTimeFormat(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC"
+}).format(new Date(`${dateKey}T00:00:00Z`));
+
 const initials = title =>
     (title || "?")
         .trim()
@@ -21,6 +36,15 @@ export default function HabitCard({ id, onEdit }) {
     if (!habit) return null;
 
     const { currentStreak, bestStreak } = getStreaks(id);
+    const trackingDays = [
+        { label: "Today", date: todayKey() },
+        { label: "Yesterday", date: shiftDate(todayKey(), -1) },
+        { label: "2 days ago", date: shiftDate(todayKey(), -2) }
+    ];
+
+    const statusForDate = date => date === todayKey()
+        ? habit.status
+        : habit.history?.find(entry => entry.date === date)?.status;
 
     const goalLabel =
         habit.goalType === "count"
@@ -44,12 +68,10 @@ export default function HabitCard({ id, onEdit }) {
                         <h3 className="habit-card-title">{habit.habitTitle}</h3>
                         <div className="habit-card-meta">
                             <span className="goal-pill">{goalLabel}</span>
-                            {currentStreak > 0 && (
-                                <span className="streak-pill">
-                                    <LocalFireDepartmentIcon style={{ fontSize: 14 }} />
-                                    {currentStreak}d
-                                </span>
-                            )}
+                            <span className="streak-pill">
+                                <LocalFireDepartmentIcon style={{ fontSize: 14 }} />
+                                {currentStreak} day streak
+                            </span>
                             <span className={`status-pill ${statusClass}`}>
                                 {habit.status === true
                                     ? "Done"
@@ -74,28 +96,46 @@ export default function HabitCard({ id, onEdit }) {
                 </div>
 
                 <div className="habit-card-actions">
-                    <div className="habit-button-row">
-                        <button
-                            type="button"
-                            className={`small-icon-btn success ${habit.status === true ? "is-active" : ""}`}
-                            onClick={() => updateStatus(id, true)}
-                            aria-label={habit.status === true ? "Undo completion" : "Mark habit done"}
-                            aria-pressed={habit.status === true}
-                        >
-                            <CheckIcon fontSize="small" />
-                        </button>
-                        <button
-                            type="button"
-                            className={`small-icon-btn danger ${habit.status === false ? "is-active" : ""}`}
-                            onClick={() => updateStatus(id, false)}
-                            aria-label={habit.status === false ? "Undo missed mark" : "Mark habit missed"}
-                            aria-pressed={habit.status === false}
-                        >
-                            <CloseIcon fontSize="small" />
-                        </button>
+                    <div className="habit-log">
+                        <div className="habit-tracking-days">
+                        {trackingDays.map(day => {
+                            const status = statusForDate(day.date);
+                            return (
+                                <div className="habit-tracking-day" key={day.date}>
+                                    <span className="habit-day-label">{day.label}</span>
+                                    <span className="habit-day-date">{formatDate(day.date)}</span>
+                                    <span className={`habit-day-status ${status === true ? "done" : status === false ? "missed" : "pending"}`}>
+                                        {status === true ? "Done" : status === false ? "Missed" : "Pending"}
+                                    </span>
+                                    <div className="habit-button-row">
+                                        <button
+                                            type="button"
+                                            className={`small-icon-btn success ${status === true ? "is-active" : ""}`}
+                                            onClick={() => updateStatus(id, true, day.date)}
+                                            aria-label={`Mark ${day.label.toLowerCase()} as done`}
+                                            aria-pressed={status === true}
+                                        >
+                                            <CheckIcon fontSize="small" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`small-icon-btn danger ${status === false ? "is-active" : ""}`}
+                                            onClick={() => updateStatus(id, false, day.date)}
+                                            aria-label={`Mark ${day.label.toLowerCase()} as missed`}
+                                            aria-pressed={status === false}
+                                        >
+                                            <CloseIcon fontSize="small" />
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        </div>
                     </div>
 
-                    <div className="habit-button-row">
+                    <div className="habit-card-footer">
+                        <span className="habit-best-streak">Best: {bestStreak} {bestStreak === 1 ? "day" : "days"}</span>
+                        <div className="habit-button-row">
                         <button
                             type="button"
                             className="ghost-btn icon-only"
@@ -112,6 +152,7 @@ export default function HabitCard({ id, onEdit }) {
                         >
                             <DeleteOutlineIcon fontSize="small" />
                         </button>
+                        </div>
                     </div>
                 </div>
             </div>

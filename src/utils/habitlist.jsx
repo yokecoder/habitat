@@ -53,6 +53,11 @@ const shiftDateKey = (dateKey, deltaDays) => {
     return date.toISOString().slice(0, 10);
 };
 
+const getStatusForDate = (habit, date) => {
+    if (date === todayKey()) return habit.status ?? null;
+    return habit.history?.find(entry => entry.date === date)?.status ?? null;
+};
+
 /**
  * Rolls a habit's "today" status into its history log, then resets status
  * to null so a new day starts fresh. Only runs once per calendar day per
@@ -93,21 +98,20 @@ const applyRollover = habits => {
 };
 
 /**
- * Current streak = consecutive completed days counting back from the most
- * recent recorded day (today if already marked done, otherwise yesterday).
- * Best streak = the longest run of consecutive completed days in history.
+ * Current streak counts back from today when today is complete, or yesterday
+ * while today is still untracked. An explicit miss always breaks the streak.
+ * Best streak is the longest run of consecutive completed calendar days.
  */
 const computeStreaks = habit => {
     const history = Array.isArray(habit.history) ? habit.history : [];
     const entries = [...history];
 
-    if (habit.status === true) {
-        entries.push({ date: todayKey(), status: true });
-    }
+    entries.push({ date: todayKey(), status: habit.status ?? null });
 
-    const doneDates = entries
-        .filter(entry => entry.status === true)
-        .map(entry => entry.date)
+    const statusByDate = new Map(entries.map(entry => [entry.date, entry.status]));
+    const doneDates = [...statusByDate]
+        .filter(([, status]) => status === true)
+        .map(([date]) => date)
         .sort();
 
     if (doneDates.length === 0) {
@@ -124,7 +128,13 @@ const computeStreaks = habit => {
 
     const doneSet = new Set(doneDates);
     let currentStreak = 0;
-    let cursorKey = doneDates[doneDates.length - 1];
+    let cursorKey = habit.status === true
+        ? todayKey()
+        : habit.status === false
+            ? null
+            : doneDates[doneDates.length - 1];
+    if (!cursorKey) return { currentStreak: 0, bestStreak };
+
     const mostRecentGap = daysBetween(cursorKey, todayKey());
 
     if (mostRecentGap <= 1) {
@@ -170,13 +180,20 @@ const useHabitStore = create((set, get) => ({
             return { habits: updated };
         }),
 
-    updateStatus: (id, status) =>
+    updateStatus: (id, status, date = todayKey()) =>
         set(state => {
-            const updated = state.habits.map(habit =>
-                habit.id === id
-                    ? { ...habit, status: habit.status === status ? null : status }
-                    : habit
-            );
+            const updated = state.habits.map(habit => {
+                if (habit.id !== id) return habit;
+
+                const nextStatus = getStatusForDate(habit, date) === status ? null : status;
+                if (date === todayKey()) {
+                    return { ...habit, status: nextStatus };
+                }
+
+                const history = (habit.history || []).filter(entry => entry.date !== date);
+                if (nextStatus !== null) history.push({ date, status: nextStatus });
+                return { ...habit, history };
+            });
             writeStorage("habitat_habits", updated);
             return { habits: updated };
         }),
